@@ -8,7 +8,7 @@ app.use(express.json());
 
 app.delete("/clientes/:id", (req, res) => {
     const id = parseInt(req.params.id); // Correção: req.params, não res.params
-    db.deleteCostumer(id);
+    db.deleteCustumer(id);
     res.sendStatus(204); // Correção: res, não response
 });
 
@@ -19,9 +19,9 @@ app.patch("/clientes/:id", (req, res) => {
     res.sendStatus(200);
 });
 
-app.post("/clientes", (req, res) => {
+app.post("/clientes", async (req, res) => {
     const customer = req.body; // Correção: req.body, não request.body
-    db.insertCustomer(customer); // Correção: insertCustomer, não insertCostumer
+    await db.insertCustomer(customer); // Correção: insertCustomer, não insertCostumer
     res.sendStatus(201);
 });
 

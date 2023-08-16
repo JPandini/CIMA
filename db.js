@@ -11,8 +11,9 @@ async function selectCustomer(id) { // Renomeado para selectCustomer
     return results[0];
 }
 
-async function insertCustomer(customer) { // Renomeado para insertCustomer
-    // Lógica para inserção de cliente
+async function insertCustomer(customer) {
+    const values = [customer.nome, customer.idade];
+    const results = await client.query("INSERT INTO clientes(nome, idade) VALUES(?,?);", values);
 }
 
 async function updateCustomer(id, customer) { // Renomeado para updateCustomer
