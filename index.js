@@ -6,41 +6,40 @@ const app = express();
 
 app.use(express.json());
 
-app.delete("/clientes/:id", (req, res)=>{
-    const id = parseInt(res.params.id);
+app.delete("/clientes/:id", (req, res) => {
+    const id = parseInt(req.params.id); // Correção: req.params, não res.params
     db.deleteCostumer(id);
-    response.sendStatus(204);
-})
+    res.sendStatus(204); // Correção: res, não response
+});
 
-app.patch("/clientes/:id", (req, res)=>{
-    const id = parseInt(res.params.id);
-    const costumers = request.body;
-    db.updateCostumer(id, costumers);
+app.patch("/clientes/:id", (req, res) => {
+    const id = parseInt(req.params.id); // Correção: req.params, não res.params
+    const customer = req.body; // Correção: req.body, não request.body
+    db.updateCustomer(id, customer); // Correção: updateCustomer, não updateCostumer
     res.sendStatus(200);
-})
+});
 
-app.post("/clientes", (req, res)=>{
-    const costumers = request.body;
-    db.insertCostumer(costumers);
+app.post("/clientes", (req, res) => {
+    const customer = req.body; // Correção: req.body, não request.body
+    db.insertCustomer(customer); // Correção: insertCustomer, não insertCostumer
     res.sendStatus(201);
-})
+});
 
-app.get("/clientes/:id", async (req, res)=>{
-    const id = parseInt(res.params.id);
-    const results = await db.selectCustomers(id);
+app.get("/clientes/:id", async (req, res) => {
+    const id = parseInt(req.params.id); // Correção: req.params, não res.params
+    const results = await db.selectCustomer(id); // Correção: selectCustomer, não selectCustomers
     res.json(results);
-}) 
+});
 
-app.get("/clientes", async (req, res)=>{
+app.get("/clientes", async (req, res) => {
     const results = await db.selectCustomers();
     res.json(results);
-})
+});
 
+app.get("/", (req, res) => {
+    res.json({ message: "hello" });
+});
 
-app.get("/", (req, res)=>{
-    res.json({message:"hello"})
-})
-
-app.listen(process.env.PORT, ()=>{
-    console.log("App is running now!")
+app.listen(process.env.PORT, () => {
+    console.log("App is running now!");
 });
