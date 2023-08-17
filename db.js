@@ -12,12 +12,12 @@ async function selectCustomer(id) { // Renomeado para selectCustomer
 }
 
 async function insertCustomer(customer) {
-    const values = [customer.nome, customer.idade];
-    const results = await client.query("INSERT INTO clientes(nome, idade) VALUES(?,?);", values);
+    const results = await client.query("INSERT INTO clientes(nome, idade) VALUES(?,?);", 
+    [customer.nome, customer.idade]);
 }
 
 async function updateCustomer(id, customer) { // Renomeado para updateCustomer
-    // Lógica para atualização de cliente
+    const results = await client.query("UPDATE clientes SET nome=?, idade=? WHERE id=?", [customer.nome, customer.idade, id])
 }
 
 async function deleteCustomer(id) { // Renomeado para deleteCustomer
