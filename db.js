@@ -21,7 +21,7 @@ async function updateCustomer(id, customer) { // Renomeado para updateCustomer
 }
 
 async function deleteCustomer(id) { // Renomeado para deleteCustomer
-    // Lógica para exclusão de cliente
+    await client.query("DELETE FROM clientes WHERE id=?", [id]);
 }
 
 module.exports = {

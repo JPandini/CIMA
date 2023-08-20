@@ -6,16 +6,16 @@ const app = express();
 
 app.use(express.json());
 
-app.delete("/clientes/:id", (req, res) => {
+app.delete("/clientes/:id", async (req, res) => {
     const id = parseInt(req.params.id); // Correção: req.params, não res.params
-    db.deleteCustumer(id);
+    await db.deleteCustomer(id);
     res.sendStatus(204); // Correção: res, não response
 });
 
-app.patch("/clientes/:id", (req, res) => {
+app.patch("/clientes/:id", async (req, res) => {
     const id = parseInt(req.params.id); // Correção: req.params, não res.params
     const customer = req.body; // Correção: req.body, não request.body
-    db.updateCustomer(id, customer); // Correção: updateCustomer, não updateCostumer
+    await db.updateCustomer(id, customer); // Correção: updateCustomer, não updateCostumer
     res.sendStatus(200);
 });
 
