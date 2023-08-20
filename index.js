@@ -1,10 +1,16 @@
 require('dotenv').config();
 const db = require('./db');
 
+const cors = require('cors');
+
+
+
 const express = require('express');
 const app = express();
 
 app.use(express.json());
+app.use(cors());
+
 
 app.delete("/clientes/:id", async (req, res) => {
     const id = parseInt(req.params.id); // Correção: req.params, não res.params
