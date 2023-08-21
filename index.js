@@ -1,8 +1,7 @@
 require('dotenv').config();
 const db = require('./db');
 
-const cors = require('cors');
-
+const cors = require('cors'); //correção network erro com axios
 
 
 const express = require('express');
