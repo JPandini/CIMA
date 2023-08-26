@@ -21,7 +21,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-
+  
 app.delete("/clientes/:id", async (req, res) => {
     const id = parseInt(req.params.id); // Correção: req.params, não res.params
     await db.deleteCustomer(id);
@@ -35,7 +35,7 @@ app.patch("/clientes/:id", async (req, res) => {
     res.sendStatus(200);
 });
 
-app.post("/clientes", async (req, res) => {
+app.post("/clientes", async (req, res) => { 
     const customer = req.body; // Correção: req.body, não request.body
     await db.insertCustomer(customer); // Correção: insertCustomer, não insertCostumer
     res.sendStatus(201);
