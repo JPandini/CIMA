@@ -10,7 +10,7 @@ net.createServer( (socket) => {
   socket.write("</cross-domain-policy>\n")
   socket.end()}
 ).listen(843)
-
+ 
 
 const cors = require('cors'); //correção network erro com axios
 
