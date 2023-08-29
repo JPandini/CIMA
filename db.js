@@ -6,8 +6,13 @@ async function selectCustomers() {
     return results[0];
 }
 
-async function selectCustomer(id) { // Renomeado para selectCustomer
+async function selectCustomer(id) { 
     const results = await client.query("SELECT * FROM clientes WHERE id=?;", [id]);
+    return results[0];
+}
+
+async function selectCustomerNome(nome) { 
+    const results = await client.query("SELECT * FROM clientes WHERE nome=?;", [nome]);
     return results[0];
 }
 

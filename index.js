@@ -12,7 +12,7 @@ net.createServer( (socket) => {
 ).listen(843)
  
 
-const cors = require('cors'); //correção network erro com axios
+const cors = require('cors'); 
 
 
 const express = require('express');
@@ -23,27 +23,33 @@ app.use(cors());
 
   
 app.delete("/clientes/:id", async (req, res) => {
-    const id = parseInt(req.params.id); // Correção: req.params, não res.params
+    const id = parseInt(req.params.id); 
     await db.deleteCustomer(id);
-    res.sendStatus(204); // Correção: res, não response
+    res.sendStatus(204);
 });
 
 app.patch("/clientes/:id", async (req, res) => {
-    const id = parseInt(req.params.id); // Correção: req.params, não res.params
-    const customer = req.body; // Correção: req.body, não request.body
-    await db.updateCustomer(id, customer); // Correção: updateCustomer, não updateCostumer
+    const id = parseInt(req.params.id); 
+    const customer = req.body; 
+    await db.updateCustomer(id, customer); 
     res.sendStatus(200);
 });
 
 app.post("/clientes", async (req, res) => { 
-    const customer = req.body; // Correção: req.body, não request.body
-    await db.insertCustomer(customer); // Correção: insertCustomer, não insertCostumer
+    const customer = req.body; 
+    await db.insertCustomer(customer); 
     res.sendStatus(201);
 });
 
+app.get("/clientes", async (req, res) => {
+    const nome = req.params.nome; 
+    const results = await db.selectCustomerNome(nome); 
+    res.json(results);
+});
+
 app.get("/clientes/:id", async (req, res) => {
-    const id = parseInt(req.params.id); // Correção: req.params, não res.params
-    const results = await db.selectCustomer(id); // Correção: selectCustomer, não selectCustomers
+    const id = parseInt(req.params.id); 
+    const results = await db.selectCustomer(id); 
     res.json(results);
 });
 
