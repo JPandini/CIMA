@@ -11,10 +11,6 @@ async function selectCustomer(id) {
     return results[0];
 }
 
-async function selectCustomerNome(nome) { 
-    const results = await client.query("SELECT * FROM clientes WHERE nome=?;", [nome]);
-    return results[0];
-}
 
 async function insertCustomer(customer) {
     const results = await client.query("INSERT INTO clientes(nome, idade) VALUES(?,?);", 
@@ -34,5 +30,6 @@ module.exports = {
     selectCustomer,
     insertCustomer,
     updateCustomer,
-    deleteCustomer
+    deleteCustomer,
+
 };

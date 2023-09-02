@@ -41,11 +41,6 @@ app.post("/clientes", async (req, res) => {
     res.sendStatus(201);
 });
 
-app.get("/clientes", async (req, res) => {
-    const nome = req.params.nome; 
-    const results = await db.selectCustomerNome(nome); 
-    res.json(results);
-});
 
 app.get("/clientes/:id", async (req, res) => {
     const id = parseInt(req.params.id); 
