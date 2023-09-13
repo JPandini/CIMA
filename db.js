@@ -1,11 +1,12 @@
 const mysql = require("mysql2/promise");
-/* const client = mysql.createPool(process.env.CONNECTION_STRING); */
-const client = mysql.createPool({
+const client = mysql.createPool(process.env.CONNECTION_STRING);
+
+/* const client = mysql.createPool({
     host     : '%10.107.0.32',
     user     : 'root',
     password : 'cima',
     database : 'cima'
-  });
+  }); */
 
 async function selectCustomers() {
     const results = await client.query("SELECT * FROM clientes;");
