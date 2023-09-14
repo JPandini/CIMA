@@ -18,7 +18,7 @@ net.createServer((socket) => {
 }).listen(843);
 
 app.use(express.json());
-app.use(cors({
+app.use(cors({ 
   exposedHeaders: ['X-Total-Count'],
 }));
 

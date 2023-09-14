@@ -30,7 +30,7 @@ async function updateCustomer(id, customer) { // Renomeado para updateCustomer
 
 async function deleteCustomer(id) { // Renomeado para deleteCustomer
     await client.query("DELETE FROM clientes WHERE id=?", [id]);
-}
+} 
 
 module.exports = {
     selectCustomers,
