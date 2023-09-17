@@ -27,7 +27,7 @@ async function insertCustomer(customer) {
 async function updateCustomer(id, customer) { // Renomeado para updateCustomer
     const results = await client.query("UPDATE clientes SET nome=?, idade=? WHERE id=?", [customer.nome, customer.idade, id])
 }
-
+ 
 async function deleteCustomer(id) { // Renomeado para deleteCustomer
     await client.query("DELETE FROM clientes WHERE id=?", [id]);
 } 
