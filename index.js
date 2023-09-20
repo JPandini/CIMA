@@ -30,14 +30,14 @@ app.use((req, res, next) => {
 });
 
 // Rota para exclusão de cliente por ID
-app.delete("/clientes/:id", async (req, res) => {
+app.delete("/cidade/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   await db.deleteCustomer(id);
   res.sendStatus(204);
 });
 
 // Rota para atualização de cliente por ID
-app.patch("/clientes/:id", async (req, res) => {
+app.patch("/cidade/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const customer = req.body;
   await db.updateCustomer(id, customer);
@@ -45,14 +45,14 @@ app.patch("/clientes/:id", async (req, res) => {
 });
 
 // Rota para criação de cliente
-app.post("/clientes", async (req, res) => {
+app.post("/cidade", async (req, res) => {
   const customer = req.body;
   await db.insertCustomer(customer);
   res.sendStatus(201);
 });
 
 // Rota para busca de cliente por ID
-app.get("/clientes/:id", async (req, res) => {
+app.get("/cidade/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const results = await db.selectCustomer(id);
 
@@ -64,7 +64,7 @@ app.get("/clientes/:id", async (req, res) => {
 });
 
 // Rota para listar todos os clientes
-app.get("/clientes", async (req, res) => {
+app.get("/cidade", async (req, res) => {
   const results = await db.selectCustomers();
   res.header('X-Total-Count', results.length);
   res.json(results);
