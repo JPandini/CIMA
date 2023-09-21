@@ -157,3 +157,35 @@ app.get("/grupo", async (req, res) => {
   res.header('X-Total-Count', results.length);
   res.json(results);
 });
+
+//----------------mensagem-----------------------
+app.delete("/mensagem/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  await db.deleteMensagem(id); 
+  res.sendStatus(204);
+});
+app.patch("/mensagem/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const mensagem = req.body;
+  await db.updateMensagem(id, mensagem);
+  res.sendStatus(200);
+});
+app.post("/mensagem", async (req, res) => {
+  const mensagem = req.body;
+  await db.insertMensagem(mensagem);
+  res.sendStatus(201);
+});
+app.get("/mensagem/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const results = await db.selectMensagem(id);
+  if (results) {
+    res.json({ data: results }); 
+  } else {
+    res.status(404).json({ error: "Cliente não encontrado" });
+  }
+});
+app.get("/mensagem", async (req, res) => {
+  const results = await db.selectMensagens();
+  res.header('X-Total-Count', results.length);
+  res.json(results);
+});

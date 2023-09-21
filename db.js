@@ -3,7 +3,7 @@ const mysql = require("mysql2/promise");
 const client = mysql.createPool({
     host     : '127.0.0.1',
     user     : 'root',
-    password : 'admin1234',
+    password : '',
     database : 'cima'
 }); 
 
@@ -98,6 +98,28 @@ async function deleteGrupo(id) {
     await client.query("DELETE FROM grupo WHERE id=?", [id]);
 } 
 
+//----------- Mensagem -----------
+
+async function selectMensagens() {
+    const results = await client.query("SELECT * FROM mensagens;");
+    return results[0]; 
+}
+async function selectMensagem(id) { 
+    const results = await client.query("SELECT * FROM mensagens WHERE id=?;", [id]);
+    return results[0];
+}
+async function insertMensagem(mensagens) {
+    const results = await client.query("INSERT INTO mensagens(conteudo, codusuario, tempo, codgrupo) VALUES(?,?,?,?);", 
+    [ mensagens.conteudo, mensagens.codusuario, mensagens.tempo, mensagens.codgrupo]);
+}
+async function updateMensagem(id, mensagens) { 
+    const results = await client.query("UPDATE grupo SET conteudo=?, codusuario=?, tempo=?, codgrupo=? WHERE id=?",
+    [mensagens.conteudo, mensagens.codusuario, mensagens.tempo, mensagens.codgrupo, id])
+} 
+async function deleteMensagem(id) { 
+    await client.query("DELETE FROM mensagens WHERE id=?", [id]);
+} 
+
 
 
 module.exports = {
@@ -124,5 +146,11 @@ module.exports = {
     insertGrupo,
     updateGrupo,
     deleteGrupo,
+    //------------
+    selectMensagens,
+    selectMensagem,
+    insertMensagem,
+    updateMensagem,
+    deleteMensagem,
     //------------
 };
