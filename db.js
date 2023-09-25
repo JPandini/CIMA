@@ -120,6 +120,7 @@ async function deleteMensagem(id) {
     await client.query("DELETE FROM mensagens WHERE id=?", [id]);
 } 
 
+
 //----------- Postagem -----------
 
 async function selectPostagens() {
@@ -141,6 +142,56 @@ async function updatePostagem(id, postagens) {
 async function deletePostagem(id) { 
     await client.query("DELETE FROM postagens WHERE id=?", [id]);
 } 
+
+
+//----------- Presidente -----------
+
+async function selectPresidentes() {
+    const results = await client.query("SELECT * FROM presidente;");
+    return results[0]; 
+}
+async function selectPresidente(id) { 
+    const results = await client.query("SELECT * FROM presidente WHERE id=?;", [id]);
+    return results[0];
+}
+async function insertPresidente(presidente) {
+    const results = await client.query("INSERT INTO presidente(nome, usuario, senha, email, codbairro) VALUES(?,?,?,?);", 
+    [ presidente.nome, presidente.usuario, presidente.senha, presidente.email, presidente.codbairro]);
+}
+async function updatePresidente(id, presidente) { 
+    const results = await client.query("UPDATE grupo SET nome=?, usuario=?, senha=?, email=?, codbairro=? WHERE id=?",
+    [presidente.nome, presidente.usuario, presidente.senha, presidente.email, presidente.codbairro, id])
+} 
+async function deletePresidente(id) { 
+    await client.query("DELETE FROM presidente WHERE id=?", [id]);
+} 
+
+
+//----------- Usuario -----------
+
+async function selectUsuarios() {
+    const results = await client.query("SELECT * FROM usuario;");
+    return results[0]; 
+}
+async function selectUsuario(id) { 
+    const results = await client.query("SELECT * FROM usuario WHERE id=?;", [id]);
+    return results[0];
+}
+async function insertUsuario(usuario) {
+    const results = await client.query("INSERT INTO usuario(nome, usuario, senha, endereco, email, cpf, codendereco) VALUES(?,?,?,?,?,?);", 
+    [ usuario.nome, usuario.usuario, usuario.senha, usuario.endereco, usuario.email, usuario.cpf, usuario.codendereco, ]);
+}
+async function updateUsuario(id, usuario) { 
+    const results = await client.query("UPDATE grupo SET nome=?, usuario=?, senha=?, endereco=?, email,=?, cpf=?, codendereco=? WHERE id=?",
+    [usuario.nome, usuario.usuario, usuario.senha, usuario.endereco, usuario.email, usuario.cpf, usuario.codendereco, id])
+} 
+async function deleteUsuario(id) { 
+    await client.query("DELETE FROM usuario WHERE id=?", [id]);
+} 
+
+
+
+
 
 
 
@@ -180,5 +231,17 @@ module.exports = {
     insertPostagem,
     updatePostagem,
     deletePostagem,
+    //------------
+    selectPresidentes,
+    selectPresidente,
+    insertPresidente,
+    updatePresidente,
+    deletePresidente,
+    //------------
+    selectUsuarios,
+    selectUsuario,
+    insertUsuario,
+    updateUsuario,
+    deleteUsuario,
     //------------
 };

@@ -221,3 +221,67 @@ app.get("/postagem", async (req, res) => {
   res.header('X-Total-Count', results.length);
   res.json(results);
 });
+
+//----------------Presidente-----------------------
+app.delete("/presidente/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  await db.deletePresidente(id); 
+  res.sendStatus(204);
+});
+app.patch("/presidente/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const presidente = req.body;
+  await db.updatePresidente(id, presidente);
+  res.sendStatus(200);
+});
+app.post("/presidente", async (req, res) => {
+  const presidente = req.body;
+  await db.insertPresidente(presidente);
+  res.sendStatus(201);
+});
+app.get("/presidente/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const results = await db.selectPresidente(id);
+  if (results) {
+    res.json({ data: results }); 
+  } else {
+    res.status(404).json({ error: "Cliente não encontrado" });
+  }
+});
+app.get("/presidente", async (req, res) => {
+  const results = await db.selectPresidentes();
+  res.header('X-Total-Count', results.length);
+  res.json(results);
+});
+
+//----------------Usuario-----------------------
+app.delete("/usuario/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  await db.deleteUsuario(id); 
+  res.sendStatus(204);
+});
+app.patch("/usuario/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const usuario = req.body;
+  await db.updateUsuario(id, usuario);
+  res.sendStatus(200);
+});
+app.post("/usuario", async (req, res) => {
+  const usuario = req.body;
+  await db.insertUsuario(usuario);
+  res.sendStatus(201);
+});
+app.get("/usuario/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const results = await db.selectUsuario(id);
+  if (results) {
+    res.json({ data: results }); 
+  } else {
+    res.status(404).json({ error: "Cliente não encontrado" });
+  }
+});
+app.get("/usuario", async (req, res) => {
+  const results = await db.selectUsuarios();
+  res.header('X-Total-Count', results.length);
+  res.json(results);
+});
