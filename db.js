@@ -120,6 +120,28 @@ async function deleteMensagem(id) {
     await client.query("DELETE FROM mensagens WHERE id=?", [id]);
 } 
 
+//----------- Postagem -----------
+
+async function selectPostagens() {
+    const results = await client.query("SELECT * FROM postagens;");
+    return results[0]; 
+}
+async function selectPostagem(id) { 
+    const results = await client.query("SELECT * FROM postagens WHERE id=?;", [id]);
+    return results[0];
+}
+async function insertPostagem(postagens) {
+    const results = await client.query("INSERT INTO postagens(data, titulo, conteudo, imagem, codusuario) VALUES(?,?,?,?);", 
+    [ postagens.data, postagens.titulo, postagens.conteudo, postagens.imagem, postagens.codusuario]);
+}
+async function updatePostagem(id, postagens) { 
+    const results = await client.query("UPDATE grupo SET data=?, titulo=?, conteudo=?, imagem=?, codusuario=? WHERE id=?",
+    [postagens.data, postagens.titulo, postagens.conteudo, postagens.imagem, postagens.codusuario, id])
+} 
+async function deletePostagem(id) { 
+    await client.query("DELETE FROM postagens WHERE id=?", [id]);
+} 
+
 
 
 module.exports = {
@@ -152,5 +174,11 @@ module.exports = {
     insertMensagem,
     updateMensagem,
     deleteMensagem,
+    //------------
+    selectPostagens,
+    selectPostagem,
+    insertPostagem,
+    updatePostagem,
+    deletePostagem,
     //------------
 };

@@ -189,3 +189,35 @@ app.get("/mensagem", async (req, res) => {
   res.header('X-Total-Count', results.length);
   res.json(results);
 });
+
+//----------------Postagem-----------------------
+app.delete("/postagem/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  await db.deletePostagem(id); 
+  res.sendStatus(204);
+});
+app.patch("/postagem/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const postagem = req.body;
+  await db.updatePostagem(id, postagem);
+  res.sendStatus(200);
+});
+app.post("/postagem", async (req, res) => {
+  const postagem = req.body;
+  await db.insertPostagem(postagem);
+  res.sendStatus(201);
+});
+app.get("/postagem/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const results = await db.selectPostagem(id);
+  if (results) {
+    res.json({ data: results }); 
+  } else {
+    res.status(404).json({ error: "Cliente não encontrado" });
+  }
+});
+app.get("/postagem", async (req, res) => {
+  const results = await db.selectPostagens();
+  res.header('X-Total-Count', results.length);
+  res.json(results);
+});
