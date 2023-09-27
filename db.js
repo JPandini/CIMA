@@ -132,7 +132,7 @@ async function selectPostagem(id) {
     return results[0];
 }
 async function insertPostagem(postagens) {
-    const results = await client.query("INSERT INTO postagens(data, titulo, conteudo, imagem, codusuario) VALUES(?,?,?,?);", 
+    const results = await client.query("INSERT INTO postagens(data, titulo, conteudo, imagem, codusuario) VALUES(?,?,?,?,?);", 
     [ postagens.data, postagens.titulo, postagens.conteudo, postagens.imagem, postagens.codusuario]);
 }
 async function updatePostagem(id, postagens) { 
@@ -142,7 +142,7 @@ async function updatePostagem(id, postagens) {
 async function deletePostagem(id) { 
     await client.query("DELETE FROM postagens WHERE id=?", [id]);
 } 
-
+ 
 
 //----------- Presidente -----------
 
@@ -155,7 +155,7 @@ async function selectPresidente(id) {
     return results[0];
 }
 async function insertPresidente(presidente) {
-    const results = await client.query("INSERT INTO presidente(nome, usuario, senha, email, codbairro) VALUES(?,?,?,?);", 
+    const results = await client.query("INSERT INTO presidente(nome, usuario, senha, email, codbairro) VALUES(?,?,?,?,?);", 
     [ presidente.nome, presidente.usuario, presidente.senha, presidente.email, presidente.codbairro]);
 }
 async function updatePresidente(id, presidente) { 
@@ -178,7 +178,7 @@ async function selectUsuario(id) {
     return results[0];
 }
 async function insertUsuario(usuario) {
-    const results = await client.query("INSERT INTO usuario(nome, usuario, senha, endereco, email, cpf, codendereco) VALUES(?,?,?,?,?,?);", 
+    const results = await client.query("INSERT INTO usuario(nome, usuario, senha, endereco, email, cpf, codendereco) VALUES(?,?,?,?,?,?,?);", 
     [ usuario.nome, usuario.usuario, usuario.senha, usuario.endereco, usuario.email, usuario.cpf, usuario.codendereco, ]);
 }
 async function updateUsuario(id, usuario) { 
