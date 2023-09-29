@@ -1,9 +1,9 @@
 const mysql = require("mysql2/promise");
 /* const client = mysql.createPool(process.env.CONNECTION_STRING); */
 const client = mysql.createPool({
-    host     : '127.0.0.1',
+    host     : 'localhost',
     user     : 'root',
-    password : '',
+    password : 'admin1234',
     database : 'cima'
 }); 
 
