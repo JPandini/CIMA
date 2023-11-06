@@ -47,7 +47,7 @@ async function selectAdminLogin(email, senha) {
 
 async function selectCidades() {
     const results = await client.query("SELECT * FROM cidade;");
-    return results[0]; 
+    return results[0];  
 }
 async function selectCidade(id) { 
     const results = await client.query("SELECT * FROM cidade WHERE id=?;", [id]);
