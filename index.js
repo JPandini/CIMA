@@ -1,24 +1,23 @@
-require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const net = require("net");
 const db = require('./db');
 const app = express();
-const port = process.env.PORT || 843;
-
-net.createServer((socket) => {
-  socket.write("<?xml version=\"1.0\"?>\n");
-  socket.write("<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">\n");
-  socket.write("<cross-domain-policy>\n");
-  socket.write("<allow-access-from domain=\"*\" to-ports=\"*\"/>\n");
-  socket.write("</cross-domain-policy>\n");
-  socket.end();
-}).listen(843);
+const port = process.env.PORT || 8000;
 
 app.use(express.json());
-app.use(cors({ 
+app.use(cors({
   exposedHeaders: ['X-Total-Count'],
 }));
+
+
+const corsOptions = {
+  origin: 'http://localhost:3000/login', // Substitua pelo domínio real do seu front-end
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Hab ilita o uso de cookies/sessões em solicitações cruzadas
+};
+
+app.use(cors());
+
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -27,6 +26,52 @@ app.use((req, res, next) => {
 
 app.listen(port, () => {
   console.log(`App is running on port ${port}`);
+});
+
+//----------------admin-----------------------
+
+app.delete("/admin/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  await db.deleteAdmin(id);
+  res.sendStatus(204);
+});
+app.patch("/admin/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const admin = req.body;
+  await db.updateAdmin(id, admin);
+  res.sendStatus(200);
+});
+app.post("/admin", async (req, res) => {
+  const admin = req.body;
+  await db.insertAdmin(admin);
+  res.sendStatus(201);
+});
+app.get("/admin/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const results = await db.selectAdmin(id);
+  if (results) {
+    res.json({ data: results }); 
+  } else {
+    res.status(404).json({ error: "Cliente não encontrado" });
+  }
+});
+app.get("/admin", async (req, res) => {
+  const results = await db.selectAdmins();
+  res.header('X-Total-Count', results.length);
+  res.json(results);
+});
+
+app.post("/adminlogin", async (req, res) => {
+  const admin = req.body;
+  const results = await db.selectAdminLogin(admin.email, admin.senha);
+
+  if (results.length > 0) {
+    // Credenciais válidas, retorne uma resposta de sucesso
+    res.sendStatus(200);
+  } else {
+    // Credenciais inválidas, retorne um código de erro
+    res.status(401).json({ error: "Credenciais inválidas" });
+  }
 });
 
 //----------------cidade-----------------------

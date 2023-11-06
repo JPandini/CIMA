@@ -3,9 +3,44 @@ const mysql = require("mysql2/promise");
 const client = mysql.createPool({
     host     : '127.0.0.1',
     user     : 'root',
-    password : '',
+    password : 'admin1234',
     database : 'cima'
 }); 
+
+
+//----------- Admin -----------
+
+async function selectAdmins() {
+    const results = await client.query("SELECT * FROM admin;");
+    return results[0]; 
+}
+async function selectAdmin(id) { 
+    const results = await client.query("SELECT * FROM admin WHERE id=?;", [id]);
+    return results[0];
+}
+async function insertAdmin(admin) {
+    const results = await client.query("INSERT INTO admin(email, nome, usuario, senha) VALUES(? ,?, ?, ?);", 
+    [admin.email ,admin.nome, admin.usuario, admin.senha]);
+}
+async function updateAdmin(id, admin) { 
+    const results = await client.query("UPDATE admin SET email=?, nome=?, usuario=?, senha=?  WHERE id=?", 
+    [admin.email ,admin.nome, admin.usuario, admin.senha, id])
+} 
+async function deleteAdmin(id) { 
+    await client.query("DELETE FROM admin WHERE id=?", [id]);
+} 
+
+async function selectAdminLogin(email, senha) {
+    const query = "SELECT * FROM admin WHERE email = ? AND senha = ?";
+    try {
+        const results = await client.query(query, [email, senha]);
+        return results[0]; // Retorna a primeira linha dos resultados
+    } catch (error) {
+        console.error("Erro na consulta SQL:", error);
+        return [];
+    }
+
+}
 
 
 //----------- Cidade -----------
@@ -243,5 +278,12 @@ module.exports = {
     insertUsuario,
     updateUsuario,
     deleteUsuario,
+    //------------
+    selectAdmins,
+    selectAdmin,
+    insertAdmin,
+    updateAdmin,
+    deleteAdmin,
+    selectAdminLogin,
     //------------
 };
