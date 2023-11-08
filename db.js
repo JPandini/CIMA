@@ -213,16 +213,16 @@ async function selectUsuario(id) {
     return results[0];
 }
 async function insertUsuario(usuario) {
-    const results = await client.query("INSERT INTO usuario(nome, usuario, senha, endereco, email, cpf, codendereco) VALUES(?,?,?,?,?,?,?);", 
-    [ usuario.nome, usuario.usuario, usuario.senha, usuario.endereco, usuario.email, usuario.cpf, usuario.codendereco, ]);
+    const results = await client.query("INSERT INTO usuario(nome, usuario, senha, email, cpf, numero_casa, rua, complemento, codbairro ) VALUES(?,?,?,?,?,?,?);", 
+    [ usuario.nome, usuario.usuario, usuario.senha, usuario.email, usuario.cpf, usuario.numero_casa, usuario.rua, usuario.complemento, usuario.codbairro, ]);
 }
 async function updateUsuario(id, usuario) { 
-    const results = await client.query("UPDATE grupo SET nome=?, usuario=?, senha=?, endereco=?, email,=?, cpf=?, codendereco=? WHERE id=?",
-    [usuario.nome, usuario.usuario, usuario.senha, usuario.endereco, usuario.email, usuario.cpf, usuario.codendereco, id])
+    const results = await client.query("UPDATE grupo SET nome=?, usuario=?, senha=?, email=?, cpf=?, numero_casa=?, rua=?, complemento=?, codbairro=?  WHERE id=?",
+    [ usuario.nome, usuario.usuario, usuario.senha, usuario.email, usuario.cpf, usuario.numero_casa, usuario.rua, usuario.complemento, usuario.codbairro, id])
 } 
 async function deleteUsuario(id) { 
     await client.query("DELETE FROM usuario WHERE id=?", [id]);
-} 
+}
 
 
 
