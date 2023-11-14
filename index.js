@@ -24,9 +24,11 @@ app.use((req, res, next) => {
   next();
 });
 
-app.listen(port, "0.0.0.0", () => {
-  console.log(`App is running on port ${port}`);
+app.get('/', (req, res) => {
+  res.send('Olá! Sua API está funcionando.');
 });
+
+
 
 //----------------admin-----------------------
 
@@ -329,4 +331,9 @@ app.get("/usuario", async (req, res) => {
   const results = await db.selectUsuarios();
   res.header('X-Total-Count', results.length);
   res.json(results);
+});
+
+
+app.listen(port, "0.0.0.0", () => {
+  console.log(`App is running on port ${port}`);
 });
