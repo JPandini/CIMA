@@ -3,6 +3,7 @@ const cors = require('cors');
 const db = require('./db');
 const app = express();
 const port = process.env.PORT || 8000;
+const jwt = require('jsonwebtoken');
 
 app.use(express.json());
 app.use(cors({
@@ -68,7 +69,9 @@ app.post("/adminlogin", async (req, res) => {
   const results = await db.selectAdminLogin(admin.email, admin.senha);
 
   if (results.length > 0) {
-    // Credenciais válidas, retorne uma resposta de sucesso
+    const token = jwt.sign( admin.email , 'secretpassphrase', { expiresIn: '5h' });
+    res.json({ token });
+
     res.sendStatus(200);
   } else {
     // Credenciais inválidas, retorne um código de erro
