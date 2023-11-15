@@ -6,30 +6,26 @@ const port = process.env.PORT || 8000;
 const jwt = require('jsonwebtoken');
 
 app.use(express.json());
-app.use(cors({
-  exposedHeaders: ['X-Total-Count'],
-}));
 
-
+// Configure o CORS apenas uma vez com as opções desejadas
 const corsOptions = {
-  origin: 'http://localhost:3000/login', // Substitua pelo domínio real do seu front-end
+  origin: 'http://localhost:3000', // Substitua pelo domínio real do seu front-end
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // Hab ilita o uso de cookies/sessões em solicitações cruzadas
+  credentials: true, // Habilita o uso de cookies/sessões em solicitações cruzadas
+  exposedHeaders: ['X-Total-Count'],
 };
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
 
+// Sua rota inicial
 app.get('/', (req, res) => {
   res.send('Olá! Sua API está funcionando.');
 });
-
-
 
 //----------------admin-----------------------
 
@@ -69,12 +65,9 @@ app.post("/adminlogin", async (req, res) => {
   const results = await db.selectAdminLogin(admin.email, admin.senha);
 
   if (results.length > 0) {
-    const token = jwt.sign( admin.email , 'secretpassphrase', { expiresIn: '5h' });
+    const token = jwt.sign({ email: admin.email }, 'secretpassphrase', { expiresIn: '5h' });
     res.json({ token });
-
-    res.sendStatus(200);
   } else {
-    // Credenciais inválidas, retorne um código de erro
     res.status(401).json({ error: "Credenciais inválidas" });
   }
 });
