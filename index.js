@@ -27,6 +27,39 @@ app.get('/', (req, res) => {
   res.send('Olá! Sua API está funcionando.');
 });
 
+
+
+// Rota protegida
+app.get('/api/dados-autenticados', verificaAutenticacao, (req, res) => {
+  // Lógica para fornecer os dados autenticados
+  res.json({ mensagem: 'Estes são os dados autenticados!' });
+});
+
+// Função para verificar a autenticação
+function verificaAutenticacao(req, res, next) {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ mensagem: 'Token não fornecido' });
+  }
+
+  // Verifique o token JWT e, se for válido, continue para a rota
+  try {
+    const decoded = jwt.verify(token.split(' ')[1], 'secretpassphrase');
+    req.usuario = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ mensagem: 'Token inválido' });
+  }
+}
+
+
+
+
+
+
+
+
 //----------------admin-----------------------
 
 app.delete("/admin/:id", async (req, res) => {
