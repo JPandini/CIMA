@@ -5,6 +5,7 @@ const app = express();
 const port = process.env.PORT || 8000;
 const jwt = require('jsonwebtoken');
 
+
 app.use(express.json());
 
 // Configure o CORS apenas uma vez com as opções desejadas
