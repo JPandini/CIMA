@@ -34,8 +34,7 @@ app.get('/', (req, res) => {
 app.get('/api/dados-autenticados', verificaAutenticacao, (req, res) => {
   // Lógica para fornecer os dados autenticados
   res.json({ mensagem: 'Estes são os dados autenticados!' });
-  const token = jwt.sign({ email: admin.email }, 'secretpassphrase', { expiresIn: '1h' });
-  res.json({ token });
+  
 });
 
 // Função para verificar a autenticação
