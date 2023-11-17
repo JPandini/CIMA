@@ -51,7 +51,14 @@ function verificaAutenticacao(req, res, next) {
     req.usuario = decoded;
     next();
   } catch (error) {
-    return res.status(401).json({ mensagem: 'Token inválido' });
+    if (error.name === 'TokenExpiredError') {
+      // Token expirado, envie um novo token
+      const novoToken = jwt.sign({ email: req.usuario.email }, 'secretpassphrase', { expiresIn: '5h' });
+      res.setHeader('Authorization', `Bearer ${novoToken}`);
+      next();
+    } else {
+      return res.status(401).json({ mensagem: 'Token inválido' });
+    }
   }
 }
 
