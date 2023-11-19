@@ -208,7 +208,7 @@ async function selectUsuario(id) {
     return results[0];
 }
 async function insertUsuario(usuario) {
-    const results = await client.query("INSERT INTO usuario(nome, usuario, senha, email, cpf, numero_casa, rua, complemento, codbairro ) VALUES(?,?,?,?,?,?,?);", 
+    const results = await client.query("INSERT INTO usuario(nome, usuario, senha, email, cpf, numero_casa, rua, complemento, codbairro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);", 
     [ usuario.nome, usuario.usuario, usuario.senha, usuario.email, usuario.cpf, usuario.numero_casa, usuario.rua, usuario.complemento, usuario.codbairro, ]);
 }
 async function updateUsuario(id, usuario) { 
