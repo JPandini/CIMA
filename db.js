@@ -230,9 +230,10 @@ async function selectUsuarioTemporario(id) {
     return results[0];
 }
 async function insertUsuarioTemporario(usuario_temp) {
-    const results = await client.query("INSERT INTO usuario_temp(nome, usuario, senha, email, cpf, numero_casa, rua, complemento, codbairro ) VALUES(?,?,?,?,?,?,?);", 
-    [ usuario_temp.nome, usuario_temp.usuario, usuario_temp.senha, usuario_temp.email, usuario_temp.cpf, usuario_temp.numero_casa, usuario_temp.rua, usuario_temp.complemento, usuario_temp.codbairro, ]);
+    const results = await client.query("INSERT INTO usuario_temp(nome, usuario, senha, email, cpf, numero_casa, rua, complemento, codbairro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);", 
+    [usuario_temp.nome, usuario_temp.usuario, usuario_temp.senha, usuario_temp.email, usuario_temp.cpf, usuario_temp.numero_casa, usuario_temp.rua, usuario_temp.complemento, usuario_temp.codbairro]);
 }
+
 async function updateUsuarioTemporario(id, usuario_temp) { 
     const results = await client.query("UPDATE usuario_temp SET nome=?, usuario=?, senha=?, email=?, cpf=?, numero_casa=?, rua=?, complemento=?, codbairro=?  WHERE id=?",
     [ usuario_temp.nome, usuario_temp.usuario, usuario_temp.senha, usuario_temp.email, usuario_temp.cpf, usuario_temp.numero_casa, usuario_temp.rua, usuario_temp.complemento, usuario_temp.codbairro, id])
