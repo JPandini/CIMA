@@ -143,7 +143,7 @@ async function insertMensagem(mensagens) {
     [ mensagens.conteudo, mensagens.codusuario, mensagens.tempo, mensagens.codgrupo]);
 }
 async function updateMensagem(id, mensagens) { 
-    const results = await client.query("UPDATE grupo SET conteudo=?, codusuario=?, tempo=?, codgrupo=? WHERE id=?",
+    const results = await client.query("UPDATE mensagens SET conteudo=?, codusuario=?, tempo=?, codgrupo=? WHERE id=?",
     [mensagens.conteudo, mensagens.codusuario, mensagens.tempo, mensagens.codgrupo, id])
 } 
 async function deleteMensagem(id) { 
@@ -166,7 +166,7 @@ async function insertPostagem(postagens) {
     [ postagens.data, postagens.titulo, postagens.conteudo, postagens.imagem, postagens.codusuario]);
 }
 async function updatePostagem(id, postagens) { 
-    const results = await client.query("UPDATE grupo SET data=?, titulo=?, conteudo=?, imagem=?, codusuario=? WHERE id=?",
+    const results = await client.query("UPDATE postagens SET data=?, titulo=?, conteudo=?, imagem=?, codusuario=? WHERE id=?",
     [postagens.data, postagens.titulo, postagens.conteudo, postagens.imagem, postagens.codusuario, id])
 } 
 async function deletePostagem(id) { 
@@ -189,7 +189,7 @@ async function insertPresidente(presidente) {
     [ presidente.nome, presidente.usuario, presidente.senha, presidente.email, presidente.codbairro]);
 }
 async function updatePresidente(id, presidente) { 
-    const results = await client.query("UPDATE grupo SET nome=?, usuario=?, senha=?, email=?, codbairro=? WHERE id=?",
+    const results = await client.query("UPDATE presidente SET nome=?, usuario=?, senha=?, email=?, codbairro=? WHERE id=?",
     [presidente.nome, presidente.usuario, presidente.senha, presidente.email, presidente.codbairro, id])
 } 
 async function deletePresidente(id) { 
@@ -212,12 +212,38 @@ async function insertUsuario(usuario) {
     [ usuario.nome, usuario.usuario, usuario.senha, usuario.email, usuario.cpf, usuario.numero_casa, usuario.rua, usuario.complemento, usuario.codbairro, ]);
 }
 async function updateUsuario(id, usuario) { 
-    const results = await client.query("UPDATE grupo SET nome=?, usuario=?, senha=?, email=?, cpf=?, numero_casa=?, rua=?, complemento=?, codbairro=?  WHERE id=?",
+    const results = await client.query("UPDATE usuario SET nome=?, usuario=?, senha=?, email=?, cpf=?, numero_casa=?, rua=?, complemento=?, codbairro=?  WHERE id=?",
     [ usuario.nome, usuario.usuario, usuario.senha, usuario.email, usuario.cpf, usuario.numero_casa, usuario.rua, usuario.complemento, usuario.codbairro, id])
 } 
 async function deleteUsuario(id) { 
     await client.query("DELETE FROM usuario WHERE id=?", [id]);
 }
+
+//----------- Usuario_Temporário -----------
+
+async function selectUsuariosTemporarios() {
+    const results = await client.query("SELECT * FROM usuario_temp;");
+    return results[0]; 
+}
+async function selectUsuarioTemporario(id) { 
+    const results = await client.query("SELECT * FROM usuario_temp WHERE id=?;", [id]);
+    return results[0];
+}
+async function insertUsuarioTemporario(usuario_temp) {
+    const results = await client.query("INSERT INTO usuario_temp(nome, usuario, senha, email, cpf, numero_casa, rua, complemento, codbairro ) VALUES(?,?,?,?,?,?,?);", 
+    [ usuario_temp.nome, usuario_temp.usuario, usuario_temp.senha, usuario_temp.email, usuario_temp.cpf, usuario_temp.numero_casa, usuario_temp.rua, usuario_temp.complemento, usuario_temp.codbairro, ]);
+}
+async function updateUsuarioTemporario(id, usuario_temp) { 
+    const results = await client.query("UPDATE usuario_temp SET nome=?, usuario=?, senha=?, email=?, cpf=?, numero_casa=?, rua=?, complemento=?, codbairro=?  WHERE id=?",
+    [ usuario_temp.nome, usuario_temp.usuario, usuario_temp.senha, usuario_temp.email, usuario_temp.cpf, usuario_temp.numero_casa, usuario_temp.rua, usuario_temp.complemento, usuario_temp.codbairro, id])
+} 
+async function deleteUsuarioTemporario(id) { 
+    await client.query("DELETE FROM usuario_temp WHERE id=?", [id]);
+}
+
+
+
+
 
 
 
@@ -280,5 +306,11 @@ module.exports = {
     updateAdmin,
     deleteAdmin,
     selectAdminLogin,
+    //------------
+    selectUsuariosTemporarios,
+    selectUsuarioTemporario,
+    insertUsuarioTemporario,
+    updateUsuarioTemporario,
+    deleteUsuarioTemporario,
     //------------
 };
