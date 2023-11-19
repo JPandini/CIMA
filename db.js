@@ -139,12 +139,12 @@ async function selectMensagem(id) {
     return results[0];
 }
 async function insertMensagem(mensagens) {
-    const results = await client.query("INSERT INTO mensagens(conteudo, codusuario, tempo, codgrupo) VALUES(?,?,?,?);", 
-    [ mensagens.conteudo, mensagens.codusuario, mensagens.tempo, mensagens.codgrupo]);
+    const results = await client.query("INSERT INTO mensagens(conteudo, codusuario, tempo) VALUES(?,?,?);", 
+    [ mensagens.conteudo, mensagens.codusuario, mensagens.tempo]);
 }
 async function updateMensagem(id, mensagens) { 
-    const results = await client.query("UPDATE mensagens SET conteudo=?, codusuario=?, tempo=?, codgrupo=? WHERE id=?",
-    [mensagens.conteudo, mensagens.codusuario, mensagens.tempo, mensagens.codgrupo, id])
+    const results = await client.query("UPDATE mensagens SET conteudo=?, codusuario=?, tempo=?,  WHERE id=?",
+    [mensagens.conteudo, mensagens.codusuario, mensagens.tempo, id])
 } 
 async function deleteMensagem(id) { 
     await client.query("DELETE FROM mensagens WHERE id=?", [id]);
