@@ -376,23 +376,23 @@ app.get("/usuario", async (req, res) => {
 
 
 //----------------Usuario temporario-----------------------
-app.delete("/usuario/:id", async (req, res) => {
+app.delete("/usuario_temp/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   await db.deleteUsuarioTemporario(id); 
   res.sendStatus(204);
 });
-app.patch("/usuario/:id", async (req, res) => {
+app.patch("/usuario_temp/:id", async (req, res) => {
   const id = parseInt(req.params.id);
-  const usuario = req.body;
-  await db.updateUsuarioTemporario(id, usuario);
+  const usuario_temp = req.body;
+  await db.updateUsuarioTemporario(id, usuario_temp);
   res.sendStatus(200);
 });
-app.post("/usuario", async (req, res) => {
-  const usuario = req.body;
-  await db.insertUsuarioTemporario(usuario);
+app.post("/usuario_temp", async (req, res) => {
+  const usuario_temp = req.body;
+  await db.insertUsuarioTemporario(usuario_temp);
   res.sendStatus(201);
 });
-app.get("/usuario/:id", async (req, res) => {
+app.get("/usuario_temp/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const results = await db.selectUsuarioTemporario(id);
   if (results) {
@@ -401,7 +401,7 @@ app.get("/usuario/:id", async (req, res) => {
     res.status(404).json({ error: "Cliente não encontrado" });
   }
 });
-app.get("/usuario", async (req, res) => {
+app.get("/usuario_temp", async (req, res) => {
   const results = await db.selectUsuariosTemporarios();
   res.header('X-Total-Count', results.length);
   res.json(results);
