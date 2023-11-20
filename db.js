@@ -1,6 +1,7 @@
 const mysql = require("mysql2/promise");
 const client = mysql.createPool(process.env.CONNECTION_STRING); 
-
+const fs = require('fs').promises; // Use fs.promises para operações assíncronas
+const path = require('path');
 
 
 //----------- Admin -----------
@@ -151,28 +152,84 @@ async function deleteMensagem(id) {
 } 
 
 
-//----------- Postagem -----------
 
+
+
+
+//----------- Postagem -----------
 async function selectPostagens() {
     const results = await client.query("SELECT * FROM postagens;");
-    return results[0]; 
+    return results;
 }
-async function selectPostagem(id) { 
+
+async function selectPostagem(id) {
     const results = await client.query("SELECT * FROM postagens WHERE id=?;", [id]);
     return results[0];
 }
+
 async function insertPostagem(postagens) {
-    const results = await client.query("INSERT INTO postagens(data, titulo, conteudo, imagem, codusuario) VALUES(?,?,?,?,?);", 
-    [ postagens.data, postagens.titulo, postagens.conteudo, postagens.imagem, postagens.codusuario]);
+    const { data, titulo, conteudo, imageUri, codusuario } = postagens;
+
+    // Verificar se há uma imagem
+    if (imageUri) {
+        const imageName = `imagem_${Date.now()}.jpg`; // Nome único para a imagem
+        const imagePath = path.join('caminho', 'para', 'seu', 'upload', 'directory', imageName);
+
+        // Salvar a imagem no sistema de arquivos
+        await saveImageFromUri(imageUri, imagePath);
+
+        // Agora, você pode salvar o caminho da imagem no banco de dados
+        const results = await client.query(
+            "INSERT INTO postagens(data, titulo, conteudo, imagem, codusuario) VALUES(?,?,?,?,?);",
+            [data, titulo, conteudo, imagePath, codusuario]
+        );
+    } else {
+        // Se não houver imagem, simplesmente salvar no banco sem o campo imagem
+        const results = await client.query(
+            "INSERT INTO postagens(data, titulo, conteudo, codusuario) VALUES(?,?,?,?);",
+            [data, titulo, conteudo, codusuario]
+        );
+    }
 }
-async function updatePostagem(id, postagens) { 
-    const results = await client.query("UPDATE postagens SET data=?, titulo=?, conteudo=?, imagem=?, codusuario=? WHERE id=?",
-    [postagens.data, postagens.titulo, postagens.conteudo, postagens.imagem, postagens.codusuario, id])
-} 
-async function deletePostagem(id) { 
+
+async function updatePostagem(id, postagens) {
+    const { data, titulo, conteudo, imageUri, codusuario } = postagens;
+
+    // Verificar se há uma imagem
+    if (imageUri) {
+        const imageName = `imagem_${Date.now()}.jpg`; // Nome único para a imagem
+        const imagePath = path.join('caminho', 'para', 'seu', 'upload', 'directory', imageName);
+
+        // Salvar a nova imagem no sistema de arquivos
+        await saveImageFromUri(imageUri, imagePath);
+
+        // Atualizar a postagem no banco de dados com o novo caminho da imagem
+        await client.query(
+            "UPDATE postagens SET data=?, titulo=?, conteudo=?, imagem=?, codusuario=? WHERE id=?",
+            [data, titulo, conteudo, imagePath, codusuario, id]
+        );
+    } else {
+        // Se não houver nova imagem, apenas atualize as outras informações
+        await client.query(
+            "UPDATE postagens SET data=?, titulo=?, conteudo=?, codusuario=? WHERE id=?",
+            [data, titulo, conteudo, codusuario, id]
+        );
+    }
+}
+
+async function deletePostagem(id) {
     await client.query("DELETE FROM postagens WHERE id=?", [id]);
-} 
- 
+}
+
+// Função para salvar a imagem do URI no sistema de arquivos
+async function saveImageFromUri(imageUri, imagePath) {
+    const response = await fetch(imageUri);
+    const imageBuffer = await response.buffer();
+    await fs.writeFile(imagePath, imageBuffer);
+}
+
+
+
 
 //----------- Presidente -----------
 
