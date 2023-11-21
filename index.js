@@ -1,17 +1,14 @@
 const express = require('express');
+const router = express.Router();
+
 const cors = require('cors');
 const db = require('./db');
 const app = express();
 
-const http = require('http');
-const socketIO = require('socket.io');
+
 
 const port = process.env.PORT || 8000;
 const jwt = require('jsonwebtoken');
-
-
-const server = http.createServer(app);
-const io = socketIO(server);
 
 
 app.use(express.json());
@@ -73,27 +70,16 @@ function verificaAutenticacao(req, res, next) {
 
 
 
-io.on('connection', (socket) => {
-  console.log('Cliente conectado');
+router.get('/dadosGrafico', async (req, res) => {
+  try {
+    const usuariosCadastrados = await db.selectUsuarios(); // Função que retorna dados de usuários
+    const presidentesCadastrados = await db.selectPresidentes(); // Função que retorna dados de presidentes
 
-  // Função para obter os dados reais da sua API
-  const obterDadosReais = async () => {
-    try {
-      const usuariosCadastrados = await db.selectUsuarios(); // Substitua pelo método correto da sua API
-      const presidentesCadastrados = await db.selectPresidentes(); // Substitua pelo método correto da sua API
-
-      // Emitir os dados para os clientes conectados
-      socket.emit('dadosAtualizados', { usuariosCadastrados, presidentesCadastrados });
-    } catch (error) {
-      console.error('Erro ao obter dados reais:', error.message);
-    }
-  };
-
-  // Emitir os dados iniciais ao conectar
-  obterDadosReais();
-
-  // Exemplo: emitir dados a cada segundo
-  setInterval(obterDadosReais, 1000);
+    res.json({ usuariosCadastrados, presidentesCadastrados });
+  } catch (error) {
+    console.error('Erro ao obter dados para o gráfico:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
 });
 
 
