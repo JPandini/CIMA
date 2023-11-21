@@ -153,6 +153,27 @@ app.post("/usuariologin", async (req, res) => {
   }
 });
 
+//usuario temporario login
+
+app.post("/usuariotemplogin", async (req, res) => {
+  const usuario_temp = req.body;
+
+  try {
+    const user = await db.selectUsuarioTempLogin(usuario_temp.email, usuario_temp.senha);
+
+    if (user && user.length > 0) {
+      // Usuário encontrado
+      res.status(200).json({ success: true, usuario_temp: user[0] });
+    } else {
+      // Usuário não encontrado
+      res.status(404).json({ success: false, message: 'Usuário não encontrado. Verifique seu email.' });
+    }
+  } catch (error) {
+    console.error("Erro durante o login:", error);
+    res.status(500).json({ success: false, message: 'Erro ao tentar fazer login. Tente novamente mais tarde.' });
+  }
+});
+
 //----------------cidade-----------------------
 
 app.delete("/cidade/:id", async (req, res) => {

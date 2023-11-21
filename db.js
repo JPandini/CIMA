@@ -280,7 +280,7 @@ async function selectUsuarioLogin(email, senha) {
     const query = "SELECT * FROM usuario WHERE email = ? AND senha = ?";
     try {
         const results = await client.query(query, [email, senha]);
-        return results[0]; // Retorna a primeira linha dos resultados
+        return results[0]; 
     } catch (error) {
         console.error("Erro na consulta SQL:", error);
         return [];
@@ -312,7 +312,17 @@ async function deleteUsuarioTemporario(id) {
 }
 
 
+async function selectUsuarioTempLogin(email, senha) {
+    const query = "SELECT * FROM usuario_temp WHERE email = ? AND senha = ?";
+    try {
+        const results = await client.query(query, [email, senha]);
+        return results[0]; 
+    } catch (error) {
+        console.error("Erro na consulta SQL:", error);
+        return [];
+    }
 
+}
 
 
 
@@ -383,5 +393,6 @@ module.exports = {
     insertUsuarioTemporario,
     updateUsuarioTemporario,
     deleteUsuarioTemporario,
+    selectUsuarioTempLogin,
     //------------
 };
