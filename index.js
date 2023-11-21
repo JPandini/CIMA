@@ -2,8 +2,16 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./db');
 const app = express();
+
+const http = require('http');
+const socketIO = require('socket.io');
+
 const port = process.env.PORT || 8000;
 const jwt = require('jsonwebtoken');
+
+
+const server = http.createServer(app);
+const io = socketIO(server);
 
 
 app.use(express.json());
@@ -65,6 +73,28 @@ function verificaAutenticacao(req, res, next) {
 
 
 
+io.on('connection', (socket) => {
+  console.log('Cliente conectado');
+
+  // Função para obter os dados reais da sua API
+  const obterDadosReais = async () => {
+    try {
+      const usuariosCadastrados = await db.selectUsuarios(); // Substitua pelo método correto da sua API
+      const presidentesCadastrados = await db.selectPresidentes(); // Substitua pelo método correto da sua API
+
+      // Emitir os dados para os clientes conectados
+      socket.emit('dadosAtualizados', { usuariosCadastrados, presidentesCadastrados });
+    } catch (error) {
+      console.error('Erro ao obter dados reais:', error.message);
+    }
+  };
+
+  // Emitir os dados iniciais ao conectar
+  obterDadosReais();
+
+  // Exemplo: emitir dados a cada segundo
+  setInterval(obterDadosReais, 1000);
+});
 
 
 
