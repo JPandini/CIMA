@@ -1,5 +1,4 @@
 const express = require('express');
-const router = express.Router();
 
 const cors = require('cors');
 const db = require('./db');
@@ -70,7 +69,7 @@ function verificaAutenticacao(req, res, next) {
 
 
 
-router.get('/dadosGrafico', async (req, res) => {
+app.get('/dadosGrafico', async (req, res) => {
   try {
     const usuariosCadastrados = await db.selectUsuarios(); // Função que retorna dados de usuários
     const presidentesCadastrados = await db.selectPresidentes(); // Função que retorna dados de presidentes
