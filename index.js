@@ -4,6 +4,7 @@ const cors = require('cors');
 const db = require('./db');
 const app = express();
 
+const bodyParser = require('body-parser');
 
 
 const port = process.env.PORT || 8000;
@@ -19,6 +20,8 @@ const corsOptions = {
   credentials: true, // Habilita o uso de cookies/sessões em solicitações cruzadas
   exposedHeaders: ['X-Total-Count'],
 };
+
+app.use(bodyParser.json());
 
 app.use(cors(corsOptions));
 
@@ -129,16 +132,24 @@ app.post("/adminlogin", async (req, res) => {
   }
 });
 
-//usuario Login
+//usuario login
+
 app.post("/usuariologin", async (req, res) => {
   const usuario = req.body;
-  const results = await db.selectUsuarioLogin(usuario.email, usuario.senha);
 
-  if (results.length > 0) {
-    const token = jwt.sign({ email: usuario.email }, 'secretpassphrase', { expiresIn: '5h' });
-    res.json({ token });
-  } else {
-    res.status(401).json({ error: "Credenciais inválidas" });
+  try {
+    const user = await db.selectUsuarioLogin(usuario.email, usuario.senha);
+
+    if (user && user.length > 0) {
+      // Usuário encontrado
+      res.status(200).json({ success: true, usuario: user[0] });
+    } else {
+      // Usuário não encontrado
+      res.status(404).json({ success: false, message: 'Usuário não encontrado. Verifique seu email.' });
+    }
+  } catch (error) {
+    console.error("Erro durante o login:", error);
+    res.status(500).json({ success: false, message: 'Erro ao tentar fazer login. Tente novamente mais tarde.' });
   }
 });
 
