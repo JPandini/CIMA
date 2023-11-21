@@ -129,6 +129,19 @@ app.post("/adminlogin", async (req, res) => {
   }
 });
 
+//usuario Login
+app.post("/usuariologin", async (req, res) => {
+  const usuario = req.body;
+  const results = await db.selectUsuarioLogin(usuario.email, usuario.senha);
+
+  if (results.length > 0) {
+    const token = jwt.sign({ email: usuario.email }, 'secretpassphrase', { expiresIn: '5h' });
+    res.json({ token });
+  } else {
+    res.status(401).json({ error: "Credenciais inválidas" });
+  }
+});
+
 //----------------cidade-----------------------
 
 app.delete("/cidade/:id", async (req, res) => {

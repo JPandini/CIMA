@@ -276,6 +276,18 @@ async function deleteUsuario(id) {
     await client.query("DELETE FROM usuario WHERE id=?", [id]);
 }
 
+async function selectUsuarioLogin(email, senha) {
+    const query = "SELECT * FROM usuario WHERE email = ? AND senha = ?";
+    try {
+        const results = await client.query(query, [email, senha]);
+        return results[0]; // Retorna a primeira linha dos resultados
+    } catch (error) {
+        console.error("Erro na consulta SQL:", error);
+        return [];
+    }
+
+}
+
 //----------- Usuario_Temporário -----------
 
 async function selectUsuariosTemporarios() {
@@ -357,6 +369,7 @@ module.exports = {
     insertUsuario,
     updateUsuario,
     deleteUsuario,
+    selectUsuarioLogin,
     //------------
     selectAdmins,
     selectAdmin,
