@@ -5,6 +5,7 @@ const db = require('./db');
 const app = express();
 
 const bodyParser = require('body-parser');
+const nodemailer = require('nodemailer');
 
 
 const port = process.env.PORT || 8000;
@@ -35,6 +36,18 @@ app.get('/', (req, res) => {
   res.send('Olá! Sua API está funcionando.');
 });
 
+
+
+//mandar email - solicitação 
+const transporter = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 
 // Rota protegida
