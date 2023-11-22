@@ -39,14 +39,36 @@ app.get('/', (req, res) => {
 
 
 //mandar email - solicitação 
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
+app.post("/aceitar-usuario/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    const cliente = await db.selectUsuarioTemporario(id);
+    if (!cliente) {
+      return res.status(404).json({ error: "Cliente não encontrado" });
+    }
+
+    // Faz a lógica para aceitar o usuário
+    await db.insertUsuario(cliente);
+
+    // Envia o e-mail para o usuário
+    const info = await transporter.sendMail({
+      from: 'cimabairros@gmail.com', 
+      to: cliente.email, 
+      subject: 'Bem-vindo ao seu site', 
+      text: 'Parabéns! Sua conta foi aceita.', 
+      html: '<p>Parabéns! Sua conta foi aceita.</p>', 
+    });
+
+    console.log('E-mail enviado: ', info.messageId);
+
+    // Deleta o usuário temporário
+    await db.deleteUsuarioTemporario(id);
+
+    res.sendStatus(201); // ou você pode enviar alguma resposta mais específica, se desejar
+  } catch (error) {
+    console.error('Erro ao aceitar o usuário:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
 });
 
 
