@@ -39,8 +39,6 @@ app.get('/', (req, res) => {
 
 // Rota protegida
 
-
-// Função para verificar a autenticação
 function verificaAutenticacao(req, res, next) {
   const token = req.headers.authorization;
 
@@ -58,11 +56,13 @@ function verificaAutenticacao(req, res, next) {
       // Token expirado, envie um novo token
       const novoToken = jwt.sign({ email: req.usuario.email }, 'secretpassphrase', { expiresIn: '5h' });
       console.log('Novo token gerado:', novoToken);
+
+      // Configure o novo token no header antes de continuar
       res.setHeader('Authorization', `Bearer ${novoToken}`);
+      
+      // Continue para a rota com o novo token
       next();
-    }
-    
-    else {
+    } else {
       return res.status(401).json({ mensagem: 'Token inválido' });
     }
   }
@@ -71,7 +71,6 @@ function verificaAutenticacao(req, res, next) {
 app.get('/dados-autenticados', verificaAutenticacao, (req, res) => {
   res.json({ mensagem: 'Estes são os dados autenticados!' });
 });
-
 
 app.get('/dadosGrafico', async (req, res) => {
   try {
