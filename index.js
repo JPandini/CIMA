@@ -38,11 +38,7 @@ app.get('/', (req, res) => {
 
 
 // Rota protegida
-app.get('/api/dados-autenticados', verificaAutenticacao, (req, res) => {
-  // Lógica para fornecer os dados autenticados
-  res.json({ mensagem: 'Estes são os dados autenticados!' });
-  
-});
+
 
 // Função para verificar a autenticação
 function verificaAutenticacao(req, res, next) {
@@ -72,7 +68,9 @@ function verificaAutenticacao(req, res, next) {
   }
 }
 
-
+app.get('/dados-autenticados', verificaAutenticacao, (req, res) => {
+  res.json({ mensagem: 'Estes são os dados autenticados!' });
+});
 
 
 app.get('/dadosGrafico', async (req, res) => {
