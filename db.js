@@ -269,9 +269,9 @@ async function insertUsuario(usuario) {
     [ usuario.nome, usuario.usuario, usuario.senha, usuario.email, usuario.cpf, usuario.numero_casa, usuario.rua, usuario.complemento, usuario.codbairro, usuario.imagem ]);
 }
 async function updateUsuario(id, usuario) { 
-    const results = await client.query("UPDATE usuario SET nome=?, usuario=?, senha=?, email=?, cpf=?, numero_casa=?, rua=?, complemento=?, codbairro=?  WHERE id=?",
-    [ usuario.nome, usuario.usuario, usuario.senha, usuario.email, usuario.cpf, usuario.numero_casa, usuario.rua, usuario.complemento, usuario.codbairro, id])
-} 
+    const results = await client.query("UPDATE usuario SET nome=?, usuario=?, senha=?, email=?, cpf=?, numero_casa=?, rua=?, complemento=?, codbairro=?, imagem=? WHERE id=?",
+    [ usuario.nome, usuario.usuario, usuario.senha, usuario.email, usuario.cpf, usuario.numero_casa, usuario.rua, usuario.complemento, usuario.codbairro, usuario.imagem, id])
+}
 async function deleteUsuario(id) { 
     await client.query("DELETE FROM usuario WHERE id=?", [id]);
 }
