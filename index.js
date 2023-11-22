@@ -475,8 +475,8 @@ app.post("/usuario_temp", async (req, res) => {
   const info = await transporter.sendMail({
     from: 'cimabairros@gmail.com',
     to: usuario_temp.email,
-    subject: 'Bem-vindo ao seu site',
-    text: 'Parabéns! Sua conta foi criada.',
+    subject: 'Solicitação aprovada!',
+    text: 'Parabéns! Sua conta foi aprovada no aplicativo CIMA. att. equipe CIMA',
     html: '<p>Parabéns! Sua conta foi criada.</p>',
   });
 
