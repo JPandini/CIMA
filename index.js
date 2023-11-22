@@ -425,14 +425,13 @@ app.post("/usuario", async (req, res) => {
 
     // Configura o transporte de e-mail
     const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
-      secure: true,
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true, // use SSL
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+        user: 'cimabairros@gmail.com', // Seu endereço de e-mail do Gmail
+        pass: 'cimaassociacaodebairros',
+    }});
 
     // Envia o e-mail para o usuário
     const info = await transporter.sendMail({
