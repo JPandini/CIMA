@@ -457,23 +457,28 @@ app.post("/usuario_temp", async (req, res) => {
   res.sendStatus(201);
 
   
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: true, 
-        auth: {
-          user: 'cimabairros@gmail.com', 
-          pass: 'cimaassociacaodebairros',
-        },
-      });
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,  // Use a porta correta para TLS
+    secure: false,  // Modo seguro definido como falso para usar o STARTTLS
+    auth: {
+      user: 'cimabairros@gmail.com',
+      pass: 'cimaassociacaodebairros',
+    },
+    tls: {
+      // Configurações TLS explicitas
+      ciphers: 'SSLv3',
+      rejectUnauthorized: false
+    }
+  });
   
-      const info = await transporter.sendMail({
-        from: 'cimabairros@gmail.com',  
-        to: usuario_temp.email,
-        subject: 'Bem-vindo ao seu site',
-        text: 'Parabéns! Sua conta foi criada.',
-        html: '<p>Parabéns! Sua conta foi criada.</p>',
-      });
+  const info = await transporter.sendMail({
+    from: 'cimabairros@gmail.com',
+    to: usuario_temp.email,
+    subject: 'Bem-vindo ao seu site',
+    text: 'Parabéns! Sua conta foi criada.',
+    html: '<p>Parabéns! Sua conta foi criada.</p>',
+  });
 
   
 
