@@ -275,6 +275,9 @@ async function updateUsuario(id, usuario) {
 async function deleteUsuario(id) { 
     await client.query("DELETE FROM usuario WHERE id=?", [id]);
 }
+async function updateUsuarioImagem(id, imagem) { 
+    const results = await client.query("UPDATE usuario SET imagem=? WHERE id=?", [imagem, id]);
+}
 
 async function selectUsuarioLogin(email, senha) {
     const query = "SELECT * FROM usuario WHERE email = ? AND senha = ?";
@@ -380,6 +383,7 @@ module.exports = {
     updateUsuario,
     deleteUsuario,
     selectUsuarioLogin,
+    updateUsuarioImagem,
     //------------
     selectAdmins,
     selectAdmin,

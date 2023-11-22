@@ -460,7 +460,12 @@ app.get("/usuario", async (req, res) => {
   res.json(results);
 });
 
-
+app.patch("/usuario/:id/imagem", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const { imagem } = req.body;
+  await db.updateUsuarioImagem(id, imagem);
+  res.sendStatus(200);
+});
 
 
 
