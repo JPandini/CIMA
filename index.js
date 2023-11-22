@@ -42,9 +42,6 @@ app.get('/', (req, res) => {
 function verificaAutenticacao(req, res, next) {
   const token = req.headers.authorization;
 
-
-
-  // Verifique o token JWT e, se for válido, continue para a rota
   try {
     const decoded = jwt.verify(token.split(' ')[1], 'secretpassphrase');
     req.usuario = decoded;
@@ -57,7 +54,7 @@ function verificaAutenticacao(req, res, next) {
 
       // Configure o novo token no header antes de continuar
       res.setHeader('Authorization', `Bearer ${novoToken}`);
-      
+
       // Continue para a rota com o novo token
       next();
     } else {
@@ -67,8 +64,13 @@ function verificaAutenticacao(req, res, next) {
 }
 
 app.get('/dados-autenticados', verificaAutenticacao, (req, res) => {
-  res.json({ mensagem: 'Estes são os dados autenticados!' });
+  // Adicione o decoded à resposta para que esteja disponível para o usuário
+  res.json({ mensagem: 'Estes são os dados autenticados!', decoded: req.usuario });
 });
+
+
+
+
 
 app.get('/dadosGrafico', async (req, res) => {
   try {
