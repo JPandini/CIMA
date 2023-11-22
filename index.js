@@ -459,7 +459,7 @@ app.post("/usuario_temp", async (req, res) => {
   
       const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
-        port: 465,
+        port: 587,
         secure: true, 
         auth: {
           user: 'cimabairros@gmail.com', 
