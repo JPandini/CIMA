@@ -452,43 +452,33 @@ app.patch("/usuario_temp/:id", async (req, res) => {
   res.sendStatus(200);
 });
 app.post("/usuario_temp", async (req, res) => {
-  try {
-    const usuario = req.body;
+  const usuario_temp = req.body;
+  await db.insertUsuarioTemporario(usuario_temp);
+  res.sendStatus(201);
 
-    // Insere o usuário no banco de dados
-    await db.insertUsuario(usuario);
+  
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true, 
+        auth: {
+          user: 'cimabairros@gmail.com', 
+          pass: 'cimaassociacaodebairros',
+        },
+      });
+  
+      const info = await transporter.sendMail({
+        from: 'cimabairros@gmail.com',  
+        to: usuario.email,
+        subject: 'Bem-vindo ao seu site',
+        text: 'Parabéns! Sua conta foi criada.',
+        html: '<p>Parabéns! Sua conta foi criada.</p>',
+      });
 
-    // Configura o transporte de e-mail
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true, // use SSL
-      auth: {
-        user: 'cimabairros@gmail.com', // Seu endereço de e-mail do Gmail
-        pass: 'cimaassociacaodebairros',
-      },
-    });
+  
 
-    // Envia o e-mail para o usuário
-    const info = await transporter.sendMail({
-      from: 'cimabairros@gmail.com',  // Altere para o seu endereço de e-mail
-      to: usuario.email,
-      subject: 'Bem-vindo ao seu site',
-      text: 'Parabéns! Sua conta foi criada.',
-      html: '<p>Parabéns! Sua conta foi criada.</p>',
-    });
 
-    console.log('E-mail enviado: ', info.messageId);
-
-    // Responde com o status 201 (Created)
-    res.sendStatus(201);
-  } catch (error) {
-    console.error('Erro ao criar o usuário:', error);
-    res.status(500).json({ error: 'Erro interno do servidor' });
-  }
 });
-
-
 app.get("/usuario_temp/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const results = await db.selectUsuarioTemporario(id);
