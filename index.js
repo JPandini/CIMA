@@ -47,19 +47,6 @@ app.post("/aceitar-usuario/:id", async (req, res) => {
       return res.status(404).json({ error: "Cliente não encontrado" });
     }
 
-    // Certifique-se de fornecer a senha corretamente
-    await db.insertUsuario({
-      nome: cliente.nome,
-      usuario: cliente.usuario,
-      senha: cliente.senha,
-      email: cliente.email,
-      cpf: cliente.cpf,
-      numero_casa: cliente.numero_casa,
-      rua: cliente.rua,
-      complemento: cliente.complemento,
-      codbairro: cliente.codbairro
-    });
-
     // Faz a lógica para aceitar o usuário
     await db.insertUsuario(cliente);
 
