@@ -488,7 +488,7 @@ app.post("/usuario_temp", async (req, res) => {
   }
 });
 
-});
+
 app.get("/usuario_temp/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const results = await db.selectUsuarioTemporario(id);
