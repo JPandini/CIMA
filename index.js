@@ -469,7 +469,7 @@ app.post("/usuario_temp", async (req, res) => {
   
       const info = await transporter.sendMail({
         from: 'cimabairros@gmail.com',  
-        to: usuario.email,
+        to: usuario_temp.email,
         subject: 'Bem-vindo ao seu site',
         text: 'Parabéns! Sua conta foi criada.',
         html: '<p>Parabéns! Sua conta foi criada.</p>',
