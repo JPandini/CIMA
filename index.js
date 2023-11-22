@@ -42,9 +42,7 @@ app.get('/', (req, res) => {
 function verificaAutenticacao(req, res, next) {
   const token = req.headers.authorization;
 
-  if (!token) {
-    return res.status(401).json({ mensagem: 'Token não fornecido' });
-  }
+
 
   // Verifique o token JWT e, se for válido, continue para a rota
   try {
