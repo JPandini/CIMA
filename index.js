@@ -451,12 +451,13 @@ app.patch("/usuario_temp/:id", async (req, res) => {
   await db.updateUsuarioTemporario(id, usuario_temp);
   res.sendStatus(200);
 });
-app.post("/usuario_temp", async (req, res) => {
+
+
+
+app.post("/usuario_temp_email", async(req, res) =>{
   const usuario_temp = req.body;
   await db.insertUsuarioTemporario(usuario_temp);
   res.sendStatus(201);
-
-  
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,    
@@ -471,7 +472,6 @@ app.post("/usuario_temp", async (req, res) => {
     }
   });
 
-  
   const info = await transporter.sendMail({
     from: 'cimabairros@gmail.com',
     to: usuario_temp.email,
@@ -479,9 +479,14 @@ app.post("/usuario_temp", async (req, res) => {
     text: 'Parabéns! Sua conta foi aprovada no aplicativo CIMA. att. equipe CIMA',
     html: '<p>Parabéns! Sua conta foi criada.</p>',
   });
+})
 
-  
 
+
+app.post("/usuario_temp", async (req, res) => {
+  const usuario_temp = req.body;
+  await db.insertUsuarioTemporario(usuario_temp);
+  res.sendStatus(201);
 
 });
 app.get("/usuario_temp/:id", async (req, res) => {
