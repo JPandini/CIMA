@@ -11,6 +11,12 @@ const nodemailer = require('nodemailer');
 const port = process.env.PORT || 8000;
 const jwt = require('jsonwebtoken');
 
+const multer = require('multer');
+const sharp = require('sharp');
+
+const storage = multer.memoryStorage(); // Salva a imagem como buffer na memória
+const upload = multer({ storage: storage });
+
 
 app.use(express.json());
 
@@ -415,11 +421,21 @@ app.patch("/usuario/:id", async (req, res) => {
   await db.updateUsuario(id, usuario);
   res.sendStatus(200);
 });
-app.post("/usuario", async (req, res) => {
-  const usuario = req.body;
-  await db.insertUsuario(usuario);
-  res.sendStatus(201);
+app.post("/usuario", upload.single('imagem'), async (req, res) => {
+  try {
+    const usuario = req.body;  
+    const imagemBuffer = req.file.buffer;
+    const imagemFormatada = await sharp(imagemBuffer).jpeg().toBuffer();
+    await db.insertUsuario(usuario);
+    res.sendStatus(201);
+  } catch (error) {
+    console.error('Erro ao processar imagem:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+
 });
+
+
 app.get("/usuario/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const results = await db.selectUsuario(id);
