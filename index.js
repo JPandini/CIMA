@@ -459,18 +459,18 @@ app.post("/usuario_temp", async (req, res) => {
   
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 587,  // Use a porta correta para TLS
-    secure: false,  // Modo seguro definido como falso para usar o STARTTLS
+    port: 465,    
+    secure: true,  // Modo seguro definido como falso para usar o STARTTLS
     auth: {
       user: 'cimabairros@gmail.com',
-      pass: 'cimaassociacaodebairros',
+      pass: 'zksn nbdj knjg ubqt',
     },
     tls: {
-      // Configurações TLS explicitas
       ciphers: 'SSLv3',
-      rejectUnauthorized: false
+      rejectUnauthorized: false,
     }
   });
+
   
   const info = await transporter.sendMail({
     from: 'cimabairros@gmail.com',
