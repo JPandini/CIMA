@@ -38,38 +38,7 @@ app.get('/', (req, res) => {
 
 
 
-//mandar email - solicitação 
-app.post("/aceitar-usuario/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  try {
-    const cliente = await db.selectUsuarioTemporario(id);
-    if (!cliente) {
-      return res.status(404).json({ error: "Cliente não encontrado" });
-    }
 
-    // Faz a lógica para aceitar o usuário
-    await db.insertUsuario(cliente);
-
-    // Envia o e-mail para o usuário
-    const info = await transporter.sendMail({
-      from: 'cimabairros@gmail.com', 
-      to: cliente.email, 
-      subject: 'Bem-vindo ao seu site', 
-      text: 'Parabéns! Sua conta foi aceita.', 
-      html: '<p>Parabéns! Sua conta foi aceita.</p>', 
-    });
-
-    console.log('E-mail enviado: ', info.messageId);
-
-    // Deleta o usuário temporário
-    await db.deleteUsuarioTemporario(id);
-
-    res.sendStatus(201); // ou você pode enviar alguma resposta mais específica, se desejar
-  } catch (error) {
-    console.error('Erro ao aceitar o usuário:', error);
-    res.status(500).json({ error: 'Erro interno do servidor' });
-  }
-});
 
 
 // Rota protegida
@@ -446,11 +415,44 @@ app.patch("/usuario/:id", async (req, res) => {
   await db.updateUsuario(id, usuario);
   res.sendStatus(200);
 });
+
 app.post("/usuario", async (req, res) => {
-  const usuario = req.body;
-  await db.insertUsuario(usuario);
-  res.sendStatus(201);
+  try {
+    const usuario = req.body;
+
+    // Insere o usuário no banco de dados
+    await db.insertUsuario(usuario);
+
+    // Configura o transporte de e-mail
+    const transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    // Envia o e-mail para o usuário
+    const info = await transporter.sendMail({
+      from: 'cimabairros@gmail.com',  // Altere para o seu endereço de e-mail
+      to: usuario.email,
+      subject: 'Bem-vindo ao seu site',
+      text: 'Parabéns! Sua conta foi criada.',
+      html: '<p>Parabéns! Sua conta foi criada.</p>',
+    });
+
+    console.log('E-mail enviado: ', info.messageId);
+
+    // Responde com o status 201 (Created)
+    res.sendStatus(201);
+  } catch (error) {
+    console.error('Erro ao criar o usuário:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
 });
+
 app.get("/usuario/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const results = await db.selectUsuario(id);
