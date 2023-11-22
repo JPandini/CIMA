@@ -471,7 +471,7 @@ app.post("/usuario_temp", async (req, res) => {
 
     // Envia o e-mail para o usuário
     const info = await transporter.sendMail({
-      from: 'seu-email@gmail.com',  // Altere para o seu endereço de e-mail
+      from: 'cimabairros@gmail.com',  // Altere para o seu endereço de e-mail
       to: usuario.email,
       subject: 'Bem-vindo ao seu site',
       text: 'Parabéns! Sua conta foi criada.',
