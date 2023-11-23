@@ -470,7 +470,8 @@ app.patch("/usuario/:id", upload.single('imagem'), async (req, res) => {
 
     // Converte a imagem para base64
     const imagemBuffer = req.file.buffer;
-    const imagemBase64 = imagemBuffer.toString('base64');
+    const imagemFormatada = await sharp(imagemBuffer).jpeg().toBuffer();
+    const imagemBase64 = imagemFormatada.toString('base64');
 
     // Atualiza o usuário no banco de dados com a imagem em base64
     await db.updateUsuario(id, { ...usuario, imagem: imagemBase64 });
