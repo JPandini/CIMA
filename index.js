@@ -10,18 +10,9 @@ const nodemailer = require('nodemailer');
 const port = process.env.PORT || 8000;
 const jwt = require('jsonwebtoken');
 
-const multer = require('multer');
-const sharp = require('sharp');
 
 
 
-const upload = multer({ limits: { fileSize: 50 * 1024 * 1024 } }, {dest:'/uploads'});
-
-const bodyParser = require('body-parser');
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.json());  
 
 // Configure o CORS apenas uma vez com as opções desejadas
@@ -447,21 +438,8 @@ app.patch("/usuario/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const usuario = req.body;
-    console.log(req.params)
-
-
-    if (!req.file || !req.file.buffer) {
-      // Verifica se há uma imagem presente na requisição
-      return res.status(400).json({ error: 'Nenhuma imagem encontrada no upload' });
-    }
-
-    // Converte a imagem para base64
-    const imagemBuffer = req.file.buffer;
-    const imagemFormatada = await sharp(imagemBuffer).jpeg().toBuffer();
-    const imagemBase64 = imagemFormatada.toString('base64');
-
-    // Atualiza o usuário no banco de dados com a imagem em base64
-    await db.updateUsuario(id, { ...usuario, imagem: imagemBase64 });
+   
+    await db.updateUsuario(id, { ...usuario });
 
     res.sendStatus(200);
   } catch (error) {
