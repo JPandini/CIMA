@@ -460,22 +460,26 @@ app.get("/usuario", async (req, res) => {
 
 app.patch("/usuario/:id", upload.single('imagem'), async (req, res) => {
   try {
-     const id = parseInt(req.params.id);
-     const usuario = req.body;
-     if (req.file && req.file.buffer) {
-        const imagemBuffer = req.file.buffer;
-        const imagemFormatada = await sharp(imagemBuffer).jpeg().toBuffer();
-        await db.updateUsuario(id, usuario);
-        res.sendStatus(200);
-     } else {
-        res.status(400).json({ error: 'Nenhuma imagem encontrada no upload' });
-     }
+    const id = parseInt(req.params.id);
+    const usuario = req.body;
+
+    if (req.file && req.file.buffer) {
+      // Converte a imagem para base64
+      const imagemBuffer = req.file.buffer;
+      const imagemBase64 = imagemBuffer.toString('base64');
+
+      // Atualiza o usuário no banco de dados com a imagem em base64
+      await db.updateUsuario(id, { ...usuario, imagem: imagemBase64 });
+
+      res.sendStatus(200);
+    } else {
+      res.status(400).json({ error: 'Nenhuma imagem encontrada no upload' });
+    }
   } catch (error) {
-     console.error('Erro ao processar imagem:', error);
-     res.status(500).json({ error: 'Erro interno do servidor' });
+    console.error('Erro ao processar imagem:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
-
 
 //----------------Usuario temporario-----------------------
 app.delete("/usuario_temp/:id", async (req, res) => {
