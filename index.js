@@ -436,8 +436,7 @@ app.patch("/usuario/:id", async (req, res) => {
       return res.status(400).json({ error: 'Nenhuma imagem encontrada na requisição' });
     }
 
-    // Se a imagem já estiver em base64, não é necessário processar novamente
-    // Atualiza o usuário no banco de dados com a imagem em base64
+
     await db.updateUsuario(id, usuario);
 
     res.sendStatus(200);
@@ -507,18 +506,6 @@ app.get("/usuario_temp", async (req, res) => {
   res.header('X-Total-Count', results.length);
   res.json(results);
 });
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
