@@ -10,6 +10,7 @@ const nodemailer = require('nodemailer');
 const port = process.env.PORT || 8000;
 const jwt = require('jsonwebtoken');
 
+const sharp = require('sharp');
 
 
 
@@ -438,8 +439,14 @@ app.patch("/usuario/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const usuario = req.body;
-   
-    await db.updateUsuario(id, { ...usuario });
+
+    if (!usuario.imagem) {
+      return res.status(400).json({ error: 'Nenhuma imagem encontrada na requisição' });
+    }
+
+    // Se a imagem já estiver em base64, não é necessário processar novamente
+    // Atualiza o usuário no banco de dados com a imagem em base64
+    await db.updateUsuario(id, usuario);
 
     res.sendStatus(200);
   } catch (error) {
