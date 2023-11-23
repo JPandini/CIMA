@@ -74,16 +74,15 @@ app.post("/refresh", (req, res) => {
   //if everything is ok, create new access token, refresh token and send to user
 });
 
-const generateAccessToken = (user) => {
-  return jwt.sign({ id: user.id, email: user.email }, "mySecretKey", {
+const generateAccessToken = (admin) => {
+  return jwt.sign({ id: admin.id, email: admin.email }, "mySecretKey", {
     expiresIn: "5s",
   });
 };
 
-const generateRefreshToken = (user) => {
-  return jwt.sign({ id: user.id, email: user.email }, "myRefreshSecretKey");
+const generateRefreshToken = (admin) => {
+  return jwt.sign({ id: admin.id, email: admin.email }, "myRefreshSecretKey");
 };
-
 
 
 const verify = (req, res, next) => {
@@ -91,19 +90,18 @@ const verify = (req, res, next) => {
   if (authHeader) {
     const token = authHeader.split(" ")[1];
 
-    jwt.verify(token, "mySecretKey", (err, user) => {
+    jwt.verify(token, "secretpassphrase", (err, admin) => {
       if (err) {
         return res.status(403).json("Token is not valid!");
       }
 
-      req.user = user;
+      req.admin = admin;
       next();
     });
   } else {
     res.status(401).json("You are not authenticated!");
   }
 };
-
 
 
 //----------------admin-----------------------
@@ -144,14 +142,14 @@ app.post("/adminlogin", async (req, res) => {
   const results = await db.selectAdminLogin(admin.email, admin.senha);
 
   if (results.length > 0) {
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
+    const accessToken = generateAccessToken(admin);
+    const refreshToken = generateRefreshToken(admin);
     refreshTokens.push(refreshToken);
     res.json({
-      email: user.email,
+      email: admin.email,
       accessToken,
       refreshToken,
-  })
+    });
   } else {
     res.status(401).json({ error: "Credenciais inválidas" });
   }
