@@ -16,13 +16,13 @@ const sharp = require('sharp');
 
 
 const storage = multer.memoryStorage(); // Salva a imagem como buffer na memória
-const upload = multer({ limits: { fileSize: 10 * 1024 * 1024 } }, {dest:'/uploads'});
+const upload = multer({ limits: { fileSize: 50 * 1024 * 1024 } }, {dest:'/uploads'});
 
 const bodyParser = require('body-parser');
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.json());  
 
 // Configure o CORS apenas uma vez com as opções desejadas
