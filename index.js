@@ -463,7 +463,7 @@ app.patch("/usuario/:id", upload.single('imagem'), async (req, res) => {
     const id = parseInt(req.params.id);
     const usuario = req.body;
 
-    if (!req.file) {
+    if (!req.file || !req.file.buffer) {
       // Verifica se há uma imagem presente na requisição
       return res.status(400).json({ error: 'Nenhuma imagem encontrada no upload' });
     }
