@@ -419,21 +419,7 @@ app.delete("/usuario/:id", async (req, res) => {
   await db.deleteUsuario(id); 
   res.sendStatus(204);
 });
-app.patch("/usuario/:id",upload.single('imagem'), async (req, res) => {
-  try {
-  const id = parseInt(req.params.id);
-  const usuario = req.body;
-  const imagemBuffer = req.file.buffer;
-  const imagemFormatada = await sharp(imagemBuffer).jpeg().toBuffer();
-  await db.updateUsuario(id, usuario);
-  res.sendStatus(200);
-  }
- catch (error) {
-  console.error('Erro ao processar imagem:', error);
-  res.status(500).json({ error: 'Erro interno do servidor' });
-}
 
-});
 app.post("/usuario",  async (req, res) => {
   const usuario = req.body;
   await db.insertUsuario(usuario);
@@ -457,7 +443,7 @@ app.get("/usuario", async (req, res) => {
   res.json(results);
 });
 
-app.patch("/usuario/:id", upload.single('imagem'), async (req, res) => {
+app.patch("/usuario/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const usuario = req.body;
