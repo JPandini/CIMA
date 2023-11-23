@@ -447,6 +447,8 @@ app.patch("/usuario/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const usuario = req.body;
+    console.log(req.params)
+
 
     if (!req.file || !req.file.buffer) {
       // Verifica se há uma imagem presente na requisição
@@ -490,7 +492,7 @@ app.post("/usuario_temp", async (req, res) => {
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,    
-    secure: true,  // Modo seguro definido como falso para usar o STARTTLS
+    secure: true, 
     auth: {
       user: 'cimabairros@gmail.com',
       pass: 'zksn nbdj knjg ubqt',
