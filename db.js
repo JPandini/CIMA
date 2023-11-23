@@ -269,9 +269,20 @@ async function insertUsuario(usuario) {
     [ usuario.nome, usuario.usuario, usuario.senha, usuario.email, usuario.cpf, usuario.numero_casa, usuario.rua, usuario.complemento, usuario.codbairro, usuario.imagem ]);
 }
 async function updateUsuario(id, usuario) { 
-    const results = await client.query("UPDATE usuario SET nome=?, usuario=?, senha=?, email=?, cpf=?, numero_casa=?, rua=?, complemento=?, codbairro=?, imagem=? WHERE id=?",
-    [ usuario.nome, usuario.usuario, usuario.senha, usuario.email, usuario.cpf, usuario.numero_casa, usuario.rua, usuario.complemento, usuario.codbairro, usuario.imagem, id])
-}
+    try {
+      const results = await client.query("UPDATE usuario SET nome=?, usuario=?, senha=?, email=?, cpf=?, numero_casa=?, rua=?, complemento=?, codbairro=?, imagem=? WHERE id=?",
+        [usuario.nome, usuario.usuario, usuario.senha, usuario.email, usuario.cpf, usuario.numero_casa, usuario.rua, usuario.complemento, usuario.codbairro, usuario.imagem, id]);
+  
+      // Verifica se a atualização foi bem-sucedida
+      if (results.affectedRows === 0) {
+        throw new Error('Usuário não encontrado para atualização');
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar usuário:', error);
+      throw error; // Propaga o erro para que possa ser tratado na rota
+    }
+  }
+
 async function deleteUsuario(id) { 
     await client.query("DELETE FROM usuario WHERE id=?", [id]);
 }
