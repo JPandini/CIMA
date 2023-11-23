@@ -172,15 +172,14 @@ async function selectPostagem(id) {
 async function insertPostagem(postagens) { 
     try {
         const results = await client.query("INSERT INTO postagens(data, titulo, descricao, codusuario, imagem) VALUES(?,?,?,?,?);",
-        [postagens.data, postagens.titulo, postagens.conteudo, postagens.codusuario, postagens.imagem]);
+        [postagens.data, postagens.titulo, postagens.descricao, postagens.codusuario, postagens.imagem]);
     
-        // Verifica se a atualização foi bem-sucedida
         if (results.affectedRows === 0) {
         throw new Error('Usuário não encontrado para atualização');
         }
     } catch (error) {
         console.error('Erro ao atualizar usuário:', error);
-        throw error; // Propaga o erro para que possa ser tratado na rota
+        throw error; 
     }
     }
 
