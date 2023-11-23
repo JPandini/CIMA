@@ -4,7 +4,6 @@ const cors = require('cors');
 const db = require('./db');
 const app = express();
 
-const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 
 
@@ -14,11 +13,17 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const sharp = require('sharp');
 
+
+
 const storage = multer.memoryStorage(); // Salva a imagem como buffer na memória
-const upload = multer({ storage: storage });
+const upload = multer({ limits: { fileSize: 10 * 1024 * 1024 } });
 
-
-app.use(express.json());
+const bodyParser = require('body-parser');
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json());  
 
 // Configure o CORS apenas uma vez com as opções desejadas
 const corsOptions = {
