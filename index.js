@@ -430,27 +430,12 @@ app.patch("/usuario/:id",upload.single('imagem'), async (req, res) => {
 }
 
 });
-app.post("/usuario", upload.single('imagem'), async (req, res) => {
-  try {
-    const usuario = req.body;  
+app.post("/usuario",  async (req, res) => {
+  const usuario = req.body;
+  await db.insertUsuario(usuario);
+  res.sendStatus(201);
 
-    if (req.file && req.file.buffer) {
-      const imagemBuffer = req.file.buffer;
-      const imagemFormatada = await sharp(imagemBuffer).jpeg().toBuffer();
-      // Aqui você pode salvar ou processar a imagem, se necessário
-
-      // Agora, você pode inserir o usuário no banco de dados
-      await db.insertUsuario(usuario);
-      res.sendStatus(201);
-    } else {
-      res.status(400).json({ error: 'Nenhuma imagem encontrada no upload' });
-    }
-  } catch (error) {
-    console.error('Erro ao processar imagem ou inserir usuário:', error);
-    res.status(500).json({ error: 'Erro interno do servidor' });
-  }
 });
-
 
 
 app.get("/usuario/:id", async (req, res) => {
