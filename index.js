@@ -24,7 +24,6 @@ const corsOptions = {
   exposedHeaders: ['X-Total-Count'],
 };
 
-app.use(bodyParser.json());
 
 app.use(cors(corsOptions));
 
