@@ -1,30 +1,21 @@
 const express = require('express');
-
 const cors = require('cors');
 const db = require('./db');
 const app = express();
-
 const nodemailer = require('nodemailer');
-
 
 const port = process.env.PORT || 8000;
 const jwt = require('jsonwebtoken');
-
 const sharp = require('sharp');
-
-
 
 app.use(express.json());  
 
-// Configure o CORS apenas uma vez com as opções desejadas
 const corsOptions = {
-  origin: 'http://localhost:3000', // Substitua pelo domínio real do seu front-end
+  origin: 'http://localhost:3000',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // Habilita o uso de cookies/sessões em solicitações cruzadas
+  credentials: true,
   exposedHeaders: ['X-Total-Count'],
 };
-
-app.use(bodyParser.json());
 
 app.use(cors(corsOptions));
 
