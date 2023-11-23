@@ -8,7 +8,8 @@ const port = process.env.PORT || 8000;
 const jwt = require('jsonwebtoken');
 const sharp = require('sharp');
 
-app.use(express.json());  
+app.use(express.json({ limit: '500mb' }));
+app.use(express.urlencoded({ limit: '500mb', extended: true }));
 
 const corsOptions = {
   origin: 'http://localhost:3000',
