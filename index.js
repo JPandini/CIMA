@@ -433,16 +433,24 @@ app.patch("/usuario/:id",upload.single('imagem'), async (req, res) => {
 app.post("/usuario", upload.single('imagem'), async (req, res) => {
   try {
     const usuario = req.body;  
-    const imagemBuffer = req.file.buffer;
-    const imagemFormatada = await sharp(imagemBuffer).jpeg().toBuffer();
-    await db.insertUsuario(usuario);
-    res.sendStatus(201);
+
+    if (req.file && req.file.buffer) {
+      const imagemBuffer = req.file.buffer;
+      const imagemFormatada = await sharp(imagemBuffer).jpeg().toBuffer();
+      // Aqui você pode salvar ou processar a imagem, se necessário
+
+      // Agora, você pode inserir o usuário no banco de dados
+      await db.insertUsuario(usuario);
+      res.sendStatus(201);
+    } else {
+      res.status(400).json({ error: 'Nenhuma imagem encontrada no upload' });
+    }
   } catch (error) {
-    console.error('Erro ao processar imagem:', error);
+    console.error('Erro ao processar imagem ou inserir usuário:', error);
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
-
 });
+
 
 
 app.get("/usuario/:id", async (req, res) => {
@@ -460,13 +468,23 @@ app.get("/usuario", async (req, res) => {
   res.json(results);
 });
 
-app.patch("/usuario/:id/imagem", async (req, res) => {
-  const id = parseInt(req.params.id);
-  const { imagem } = req.body;
-  await db.updateUsuarioImagem(id, imagem);
-  res.sendStatus(200);
+app.patch("/usuario/:id", upload.single('imagem'), async (req, res) => {
+  try {
+     const id = parseInt(req.params.id);
+     const usuario = req.body;
+     if (req.file && req.file.buffer) {
+        const imagemBuffer = req.file.buffer;
+        const imagemFormatada = await sharp(imagemBuffer).jpeg().toBuffer();
+        await db.updateUsuario(id, usuario);
+        res.sendStatus(200);
+     } else {
+        res.status(400).json({ error: 'Nenhuma imagem encontrada no upload' });
+     }
+  } catch (error) {
+     console.error('Erro ao processar imagem:', error);
+     res.status(500).json({ error: 'Erro interno do servidor' });
+  }
 });
-
 
 
 //----------------Usuario temporario-----------------------
