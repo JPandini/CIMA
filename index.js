@@ -45,64 +45,55 @@ app.get('/', (req, res) => {
 
 
 
-let refreshTokens = [];
 
-app.post("/refresh", (req, res) => {
-  //take the refresh token from the user
-  const refreshToken = req.body.token;
 
-  //send error if there is no token or it's invalid
-  if (!refreshToken) return res.status(401).json("You are not authenticated!");
-  if (!refreshTokens.includes(refreshToken)) {
-    return res.status(403).json("Refresh token is not valid!");
+// Rota protegida
+
+function verificaAutenticacao(req, res, next) {
+  const token = req.headers.authorization;
+
+  try {
+    const decoded = jwt.verify(token.split(' ')[1], 'secretpassphrase');
+    req.usuario = decoded;
+    next();
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      // Token expirado, envie um novo token
+      const novoToken = jwt.sign({ email: req.usuario.email }, 'secretpassphrase', { expiresIn: '5h' });
+      console.log('Novo token gerado:', novoToken);
+
+      // Configure o novo token no header antes de continuar
+      res.setHeader('Authorization', `Bearer ${novoToken}`);
+
+      // Continue para a rota com o novo token
+      next();
+    } else {
+      return res.status(401).json({ mensagem: 'Token inválido' });
+    }
   }
-  jwt.verify(refreshToken, "secretpassphrase", (err, user) => {
-    err && console.log(err);
-    refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+}
 
-    const newAccessToken = generateAccessToken(user);
-    const newRefreshToken = generateRefreshToken(user);
-
-    refreshTokens.push(newRefreshToken);
-
-    res.status(200).json({
-      accessToken: newAccessToken,
-      refreshToken: newRefreshToken,
-    });
-  });
-
-  //if everything is ok, create new access token, refresh token and send to user
+app.get('/dados-autenticados', verificaAutenticacao, (req, res) => {
+  // Adicione o decoded à resposta para que esteja disponível para o usuário
+  res.json({ mensagem: 'Estes são os dados autenticados!', decoded: req.usuario });
 });
 
-const generateAccessToken = (user) => {
-  return jwt.sign({ id: user.id, email: user.email }, "mySecretKey", {
-    expiresIn: "5s",
-  });
-};
-
-const generateRefreshToken = (user) => {
-  return jwt.sign({ id: user.id, email: user.email }, "myRefreshSecretKey");
-};
 
 
 
-const verify = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
 
-    jwt.verify(token, "mySecretKey", (err, user) => {
-      if (err) {
-        return res.status(403).json("Token is not valid!");
-      }
+app.get('/dadosGrafico', async (req, res) => {
+  try {
+    const usuariosCadastrados = await db.selectUsuarios(); // Função que retorna dados de usuários
+    const presidentesCadastrados = await db.selectPresidentes(); // Função que retorna dados de presidentes
 
-      req.user = user;
-      next();
-    });
-  } else {
-    res.status(401).json("You are not authenticated!");
+    res.json({ usuariosCadastrados, presidentesCadastrados });
+  } catch (error) {
+    console.error('Erro ao obter dados para o gráfico:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
   }
-};
+});
+
 
 
 
@@ -144,24 +135,13 @@ app.post("/adminlogin", async (req, res) => {
   const results = await db.selectAdminLogin(admin.email, admin.senha);
 
   if (results.length > 0) {
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
-    refreshTokens.push(refreshToken);
-    res.json({
-      email: user.email,
-      accessToken,
-      refreshToken,
-  })
+    const token = jwt.sign({ email: admin.email }, 'secretpassphrase', { expiresIn: '5h' });
+    res.json({ token });
   } else {
     res.status(401).json({ error: "Credenciais inválidas" });
   }
 });
 
-app.post("/logout", verify, (req, res) => {
-  const refreshToken = req.body.token;
-  refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
-  res.status(200).json("You logged out successfully.");
-});
 //usuario login
 
 app.post("/usuariologin", async (req, res) => {
@@ -556,17 +536,6 @@ app.get("/usuario_temp", async (req, res) => {
 
 
 
-app.get('/dadosGrafico', async (req, res) => {
-  try {
-    const usuariosCadastrados = await db.selectUsuarios(); // Função que retorna dados de usuários
-    const presidentesCadastrados = await db.selectPresidentes(); // Função que retorna dados de presidentes
-
-    res.json({ usuariosCadastrados, presidentesCadastrados });
-  } catch (error) {
-    console.error('Erro ao obter dados para o gráfico:', error);
-    res.status(500).json({ error: 'Erro interno do servidor' });
-  }
-});
 
 
 
