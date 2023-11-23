@@ -10,6 +10,7 @@ const nodemailer = require('nodemailer');
 const port = process.env.PORT || 8000;
 const jwt = require('jsonwebtoken');
 
+const multer = require('multer');
 const sharp = require('sharp');
 
 
