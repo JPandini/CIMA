@@ -140,12 +140,12 @@ async function selectMensagem(id) {
     return results[0];
 }
 async function insertMensagem(mensagens) {
-    const results = await client.query("INSERT INTO mensagens(conteudo, codusuario, tempo) VALUES(?,?,?);", 
-    [ mensagens.conteudo, mensagens.codusuario, mensagens.tempo]);
+    const results = await client.query("INSERT INTO mensagens(descricao, codusuario, tempo) VALUES(?,?,?);", 
+    [ mensagens.descricao, mensagens.codusuario, mensagens.tempo]);
 }
 async function updateMensagem(id, mensagens) { 
-    const results = await client.query("UPDATE mensagens SET conteudo=?, codusuario=?, tempo=?,  WHERE id=?",
-    [mensagens.conteudo, mensagens.codusuario, mensagens.tempo, id])
+    const results = await client.query("UPDATE mensagens SET descricao=?, codusuario=?, tempo=?,  WHERE id=?",
+    [mensagens.descricao, mensagens.codusuario, mensagens.tempo, id])
 } 
 async function deleteMensagem(id) { 
     await client.query("DELETE FROM mensagens WHERE id=?", [id]);
@@ -159,7 +159,7 @@ async function deleteMensagem(id) {
 //----------- Postagem -----------
 async function selectPostagens() {
     const results = await client.query("SELECT * FROM postagens;");
-    return results;
+    return results[0]; 
 }
 
 async function selectPostagem(id) {
@@ -167,66 +167,36 @@ async function selectPostagem(id) {
     return results[0];
 }
 
-async function insertPostagem(postagens) {
-    const { data, titulo, conteudo, imageUri, codusuario } = postagens;
 
-    // Verificar se há uma imagem
-    if (imageUri) {
-        const imageName = `imagem_${Date.now()}.jpg`; // Nome único para a imagem
-        const imagePath = path.join('caminho', 'para', 'seu', 'upload', 'directory', imageName);
 
-        // Salvar a imagem no sistema de arquivos
-        await saveImageFromUri(imageUri, imagePath);
-
-        // Agora, você pode salvar o caminho da imagem no banco de dados
-        const results = await client.query(
-            "INSERT INTO postagens(data, titulo, conteudo, imagem, codusuario) VALUES(?,?,?,?,?);",
-            [data, titulo, conteudo, imagePath, codusuario]
-        );
-    } else {
-        // Se não houver imagem, simplesmente salvar no banco sem o campo imagem
-        const results = await client.query(
-            "INSERT INTO postagens(data, titulo, conteudo, codusuario) VALUES(?,?,?,?);",
-            [data, titulo, conteudo, codusuario]
-        );
+async function insertPostagem(postagens) { 
+    try {
+        const results = await client.query("INSERT INTO postagens(data, titulo, descricao, codusuario, imagem) VALUES(?,?,?,?,?);",
+        [postagens.data, postagens.titulo, postagens.conteudo, postagens.codusuario, postagens.imagem]);
+    
+        // Verifica se a atualização foi bem-sucedida
+        if (results.affectedRows === 0) {
+        throw new Error('Usuário não encontrado para atualização');
+        }
+    } catch (error) {
+        console.error('Erro ao atualizar usuário:', error);
+        throw error; // Propaga o erro para que possa ser tratado na rota
     }
-}
+    }
+
 
 async function updatePostagem(id, postagens) {
-    const { data, titulo, conteudo, imageUri, codusuario } = postagens;
-
-    // Verificar se há uma imagem
-    if (imageUri) {
-        const imageName = `imagem_${Date.now()}.jpg`; // Nome único para a imagem
-        const imagePath = path.join('caminho', 'para', 'seu', 'upload', 'directory', imageName);
-
-        // Salvar a nova imagem no sistema de arquivos
-        await saveImageFromUri(imageUri, imagePath);
-
-        // Atualizar a postagem no banco de dados com o novo caminho da imagem
-        await client.query(
-            "UPDATE postagens SET data=?, titulo=?, conteudo=?, imagem=?, codusuario=? WHERE id=?",
-            [data, titulo, conteudo, imagePath, codusuario, id]
-        );
-    } else {
-        // Se não houver nova imagem, apenas atualize as outras informações
-        await client.query(
-            "UPDATE postagens SET data=?, titulo=?, conteudo=?, codusuario=? WHERE id=?",
-            [data, titulo, conteudo, codusuario, id]
+    const results = await client.query("UPDATE postagens SET data=?, titulo=?, descricao=?, codusuario=? imagem=? WHERE id=?",
+        [postagens.data, postagens.titulo, postagens.descricao, postagens.codusuario,postagens.imagem, id]
         );
     }
-}
+
 
 async function deletePostagem(id) {
     await client.query("DELETE FROM postagens WHERE id=?", [id]);
 }
 
-// Função para salvar a imagem do URI no sistema de arquivos
-async function saveImageFromUri(imageUri, imagePath) {
-    const response = await fetch(imageUri);
-    const imageBuffer = await response.buffer();
-    await fs.writeFile(imagePath, imageBuffer);
-}
+
 
 
 

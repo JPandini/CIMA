@@ -345,11 +345,22 @@ app.patch("/postagem/:id", async (req, res) => {
   await db.updatePostagem(id, postagem);
   res.sendStatus(200);
 });
+
 app.post("/postagem", async (req, res) => {
-  const postagem = req.body;
-  await db.insertPostagem(postagem);
-  res.sendStatus(201);
+  try {
+    const postagem = req.body;
+
+    if (!postagem.imagem) {
+      return res.status(400).json({ error: 'Nenhuma imagem encontrada na requisição' });
+    }
+    await db.insertPostagem(postagem);
+    res.sendStatus(201);
+  } catch (error) {
+    console.error('Erro ao processar imagem:', error);
+    res.status(500).json({ error: 'Erro interno do servidor', details: error.message });
+  }
 });
+
 app.get("/postagem/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const results = await db.selectPostagem(id);
