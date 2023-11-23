@@ -16,7 +16,7 @@ const sharp = require('sharp');
 
 
 const storage = multer.memoryStorage(); // Salva a imagem como buffer na memória
-const upload = multer({ limits: { fileSize: 10 * 1024 * 1024 } });
+const upload = multer({ limits: { fileSize: 10 * 1024 * 1024 } }, {dest:'/uploads'});
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '10mb' }));
