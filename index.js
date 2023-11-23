@@ -460,7 +460,7 @@ app.patch("/usuario/:id", upload.single('imagem'), async (req, res) => {
      if (req.file && req.file.buffer) {
         const imagemBuffer = req.file.buffer;
         const imagemFormatada = await sharp(imagemBuffer).jpeg().toBuffer();
-        await db.updateUsuario(id, usuario);
+        await db.updateUsuarioImagem(id, imagemFormatada); 
         res.sendStatus(200);
      } else {
         res.status(400).json({ error: 'Nenhuma imagem encontrada no upload' });
