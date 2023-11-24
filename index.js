@@ -136,9 +136,10 @@ app.post("/presidentelogin", async (req, res) => {
   const admin = req.body;
   const results = await db.selectPresidenteLogin(admin.email, admin.senha);
 
-  if (results.length > 0) {
-    const token = jwt.sign({ email: admin.email, senha: admin.senha }, 'secretpassphrase', { expiresIn: '9h' });
-    res.json({ token });
+  if (results) {
+    const { idPresidente, email } = results;
+    const token = jwt.sign({ email, idPresidente }, 'secretpassphrase', { expiresIn: '9h' });
+    res.json({ token, idPresidente });
   } else {
     res.status(401).json({ error: "Credenciais inválidas" });
   }

@@ -223,16 +223,15 @@ async function deletePresidente(id) {
 } 
 
 async function selectPresidenteLogin(email, senha) {
-    const query = "SELECT * FROM presidente WHERE email = ? AND senha = ?";
+    const query = "SELECT idPresidente, email FROM presidente WHERE email = ? AND senha = ?";
     try {
-        const results = await client.query(query, [email, senha]);
-        return results[0]; 
+      const results = await client.query(query, [email, senha]);
+      return results[0];
     } catch (error) {
-        console.error("Erro na consulta SQL:", error);
-        return [];
+      console.error("Erro na consulta SQL:", error);
+      return null; // Alterado para retornar null em caso de erro
     }
-
-}
+  }
 
 
 //----------- Usuario -----------
