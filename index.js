@@ -136,8 +136,8 @@ app.post("/presidentelogin", async (req, res) => {
   const admin = req.body;
   const results = await db.selectPresidenteLogin(admin.email, admin.senha);
 
-  if (results) {
-    const { id, email } = results;
+  if (results && results.length > 0) {
+    const { id, email } = results[0];
     const token = jwt.sign({ email, id }, 'secretpassphrase', { expiresIn: '9h' });
     res.json({ token, id });
   } else {
