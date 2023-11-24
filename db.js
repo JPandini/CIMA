@@ -1,5 +1,12 @@
 const mysql = require("mysql2/promise");
-const client = mysql.createPool(process.env.CONNECTION_STRING); 
+const client = mysql.createPool({
+    host: 'monorail.proxy.rlwy.net',
+    user: 'root',
+    password: 'eeCEaA161-351e1h54hgFFbgB52B5ACb',
+    database: 'railway',
+    port: 52579
+  });
+  
 const fs = require('fs').promises; // Use fs.promises para operações assíncronas
 const path = require('path');
 

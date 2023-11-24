@@ -11,6 +11,8 @@ const sharp = require('sharp');
 app.use(express.json({ limit: '500mb' }));
 app.use(express.urlencoded({ limit: '500mb', extended: true }));
 
+
+
 const corsOptions = {
   origin: 'http://localhost:3000',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -388,7 +390,7 @@ app.post("/postagem", async (req, res) => {
     res.status(500).json({ error: 'Erro interno do servidor', details: error.message });
   }
 });
-
+ 
 app.get("/postagem/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const results = await db.selectPostagem(id);
