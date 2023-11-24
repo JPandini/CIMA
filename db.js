@@ -321,7 +321,17 @@ async function selectUsuarioTempLogin(email, senha) {
 
 
 
-
+async function selectUsuariosPorBairro(codbairro) {
+    const query = codbairro ? "SELECT * FROM usuario WHERE codbairro = ?;" : "SELECT * FROM usuario;";
+    const results = await client.query(query, codbairro ? [codbairro] : []);
+    return results[0];
+  }
+  
+  async function selectPresidentesPorBairro(codbairro) {
+    const query = codbairro ? "SELECT * FROM presidente WHERE codbairro = ?;" : "SELECT * FROM presidente;";
+    const results = await client.query(query, codbairro ? [codbairro] : []);
+    return results[0];
+  }
 
 
 
@@ -391,4 +401,6 @@ module.exports = {
     deleteUsuarioTemporario,
     selectUsuarioTempLogin,
     //------------
+    selectUsuariosPorBairro,
+    selectPresidentesPorBairro,
 };

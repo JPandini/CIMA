@@ -70,10 +70,22 @@ app.get('/dados-autenticados', verificaAutenticacao, (req, res) => {
 
 
 
-app.get('/dadosGrafico', async (req, res) => {
+app.get('/dadosGrafico/:codbairro?', async (req, res) => {
   try {
-    const usuariosCadastrados = await db.selectUsuarios(); // Função que retorna dados de usuários
-    const presidentesCadastrados = await db.selectPresidentes(); // Função que retorna dados de presidentes
+    const { codbairro } = req.params;
+
+    let usuariosCadastrados;
+    let presidentesCadastrados;
+
+    if (codbairro) {
+      // Se codbairro existir, busca dados específicos do bairro
+      usuariosCadastrados = await db.selectUsuariosPorBairro(codbairro);
+      presidentesCadastrados = await db.selectPresidentesPorBairro(codbairro);
+    } else {
+      // Se codbairro não existir, busca dados gerais
+      usuariosCadastrados = await db.selectUsuarios();
+      presidentesCadastrados = await db.selectPresidentes();
+    }
 
     res.json({ usuariosCadastrados, presidentesCadastrados });
   } catch (error) {
