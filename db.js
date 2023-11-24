@@ -222,6 +222,18 @@ async function deletePresidente(id) {
     await client.query("DELETE FROM presidente WHERE id=?", [id]);
 } 
 
+async function selectPresidenteLogin(email, senha) {
+    const query = "SELECT * FROM presidente WHERE email = ? AND senha = ?";
+    try {
+        const results = await client.query(query, [email, senha]);
+        return results[0]; 
+    } catch (error) {
+        console.error("Erro na consulta SQL:", error);
+        return [];
+    }
+
+}
+
 
 //----------- Usuario -----------
 
@@ -356,6 +368,7 @@ module.exports = {
     insertPresidente,
     updatePresidente,
     deletePresidente,
+    selectPresidenteLogin,
     //------------
     selectUsuarios,
     selectUsuario,

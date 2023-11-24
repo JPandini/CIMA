@@ -118,17 +118,32 @@ app.get("/admin", async (req, res) => {
   res.json(results);
 });
 
+//loginAdmin
 app.post("/adminlogin", async (req, res) => {
   const admin = req.body;
   const results = await db.selectAdminLogin(admin.email, admin.senha);
 
   if (results.length > 0) {
-    const token = jwt.sign({ email: admin.email }, 'secretpassphrase', { expiresIn: '9h' });
+    const token = jwt.sign({ email: admin.email, senha: admin.senha }, 'secretpassphrase', { expiresIn: '9h' });
     res.json({ token });
   } else {
     res.status(401).json({ error: "Credenciais inválidas" });
   }
 });
+
+//loginPresidente
+app.post("/presidentelogin", async (req, res) => {
+  const admin = req.body;
+  const results = await db.selectPresidenteLogin(admin.email, admin.senha);
+
+  if (results.length > 0) {
+    const token = jwt.sign({ email: admin.email, senha: admin.senha }, 'secretpassphrase', { expiresIn: '9h' });
+    res.json({ token });
+  } else {
+    res.status(401).json({ error: "Credenciais inválidas" });
+  }
+});
+
 
 //usuario login
 
