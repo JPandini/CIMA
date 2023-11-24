@@ -223,7 +223,7 @@ async function deletePresidente(id) {
 } 
 
 async function selectPresidenteLogin(email, senha) {
-    const query = "SELECT idPresidente, email FROM presidente WHERE email = ? AND senha = ?";
+    const query = "SELECT id, email FROM presidente WHERE email = ? AND senha = ?";
     try {
       const results = await client.query(query, [email, senha]);
       return results[0];
