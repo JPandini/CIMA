@@ -97,19 +97,13 @@ app.get('/dadosGrafico/:codbairro?', async (req, res) => {
 });
 
 
-app.get('/postagem/bairro/:codusuario', async (req, res) => {
+app.get('/postagem/usuario/:codusuario', async (req, res) => {
   try {
-    const { codusuario } = req.params;
-
-    // Primeiro, obtemos o codbairro associado a esse usuário
-    const { codbairro } = await db.selectIdUsuarioPorBairro(codusuario);
-
-    // Em seguida, obtemos as postagens relacionadas a esse codbairro
-    const postagens = await db.selectPostagensPorBairro(codbairro);
-
+    const { codUsuario } = req.params;
+    const postagens = await db.selectPostagensByUsuario(codUsuario);
     res.json(postagens);
   } catch (error) {
-    console.error('Erro ao obter postagens:', error);
+    console.error('Erro ao obter postagens por usuário:', error);
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });

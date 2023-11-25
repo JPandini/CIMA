@@ -340,16 +340,23 @@ async function selectUsuariosPorBairro(codbairro) {
     return results[0];
   }
 
-  async function selectIdUsuarioPorBairro(codusuario) {
-    const results = await client.query('SELECT codbairro FROM usuario WHERE codusuario = ?;', [codusuario]);
-    return results[0];
-  }
-  
-  async function selectPostagensPorBairro(codbairro) {
-    const results = await client.query('SELECT * FROM postagem WHERE codbairro = ?;', [codbairro]);
-    return results[0];
-  }
 
+  async function selectPostagensByUsuario(codUsuario) {
+    const query = `
+      SELECT p.*, u.codbairro
+      FROM postagem p
+      JOIN usuario u ON p.codUsuario = u.id
+      WHERE p.codUsuario = ?;
+    `;
+  
+    try {
+      const results = await client.query(query, [codUsuario]);
+      return results[0];
+    } catch (error) {
+      console.error("Erro na consulta SQL:", error);
+      return null;
+    }
+  }
 module.exports = {
     selectCidades,
     selectCidade,
@@ -418,7 +425,6 @@ module.exports = {
     //------------
     selectUsuariosPorBairro,
     selectPresidentesPorBairro,
-    selectIdUsuarioPorBairro,
-    selectPostagensPorBairro,
+    selectPostagensByUsuario,
 
 };
