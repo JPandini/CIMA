@@ -340,7 +340,15 @@ async function selectUsuariosPorBairro(codbairro) {
     return results[0];
   }
 
-
+  async function selectIdUsuarioPorBairro(codusuario) {
+    const results = await client.query('SELECT codbairro FROM usuario WHERE codusuario = ?;', [codusuario]);
+    return results[0];
+  }
+  
+  async function selectPostagensPorBairro(codbairro) {
+    const results = await client.query('SELECT * FROM postagem WHERE codbairro = ?;', [codbairro]);
+    return results[0];
+  }
 
 module.exports = {
     selectCidades,
@@ -410,4 +418,7 @@ module.exports = {
     //------------
     selectUsuariosPorBairro,
     selectPresidentesPorBairro,
+    selectIdUsuarioPorBairro,
+    selectPostagensPorBairro,
+
 };
