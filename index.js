@@ -108,6 +108,17 @@ app.get('/postagem/usuario/:codusuario', async (req, res) => {
   }
 });
 
+app.get('/postagem/bairro/:idBairro', async (req, res) => {
+  try {
+    const { idBairro } = req.params;
+    const postagens = await db.selectPostagensByBairro(idBairro);
+    res.json(postagens);
+  } catch (error) {
+    console.error('Erro ao obter postagens por bairro:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 
 
 
