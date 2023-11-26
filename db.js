@@ -111,8 +111,8 @@ async function selectPostagem(id) {
 
 async function insertPostagem(postagens) { 
     try {
-        const results = await client.query("INSERT INTO postagens(data, titulo, descricao, codusuario, imagem, nome_usuario) VALUES(?,?,?,?,?,?);",
-        [postagens.data, postagens.titulo, postagens.descricao, postagens.codusuario, postagens.imagem, postagens.nome_usuario]);
+        const results = await client.query("INSERT INTO postagens(data, titulo, descricao, codusuario, imagem, nome_usuario, imagem_usuario) VALUES(?,?,?,?,?,?,?);",
+        [postagens.data, postagens.titulo, postagens.descricao, postagens.codusuario, postagens.imagem, postagens.nome_usuario, postagens.imagem_usuario]);
     
         if (results.affectedRows === 0) {
         throw new Error('Usuário não encontrado para atualização');
