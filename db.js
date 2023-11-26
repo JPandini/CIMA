@@ -294,7 +294,7 @@ async function selectUsuariosPorBairro(codbairro) {
   async function selectPostagensByBairro(idBairro) {
     const query = `
       SELECT postagens.*
-      FROM postagem
+      FROM postagens
       INNER JOIN usuario ON postagens.codUsuario = usuario.id
       WHERE usuario.codbairro = ?;
     `;
