@@ -316,6 +316,12 @@ module.exports = {
     updateCidade,
     deleteCidade,
     //------------
+    selectBairros,
+    selectBairro,
+    insertBairro,
+    updateBairro,
+    deleteBairro,
+    //------------
     selectPostagens,
     selectPostagem,
     insertPostagem,
