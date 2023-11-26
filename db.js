@@ -276,9 +276,9 @@ async function selectUsuariosPorBairro(codbairro) {
 
   async function selectPostagensByUsuario(codUsuario) {
     const query = `
-      SELECT p.*, u.codbairro
+      SELECT p.*, usuario.codbairro
       FROM postagens p
-      JOIN usuario u ON p.codusuario = u.id
+      JOIN usuario u ON p.codUsuario = usuario.id
       WHERE p.codusuario = ?;
     `;
   
