@@ -111,6 +111,12 @@ app.get('/postagem/usuario/:codusuario', async (req, res) => {
 app.get('/postagem/bairro/:idBairro', async (req, res) => {
   try {
     const { idBairro } = req.params;
+
+    if (isNaN(idBairro)) {
+      // Se idBairro não for um número, retorne um erro ou um valor padrão
+      return res.status(400).json({ error: 'O ID do bairro deve ser um número válido' });
+    }
+
     const postagens = await db.selectPostagensByBairro(idBairro);
     res.json(postagens);
   } catch (error) {
@@ -118,6 +124,7 @@ app.get('/postagem/bairro/:idBairro', async (req, res) => {
     res.status(500).json({ error: 'Erro interno do servidor' });
   }
 });
+
 
 
 
@@ -290,101 +297,6 @@ app.get("/bairro", async (req, res) => {
   res.json(results);
 });
 
-//----------------endereco-----------------------
-app.delete("/endereco/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  await db.deleteEndereco(id);
-  res.sendStatus(204);
-});
-app.patch("/endereco/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  const endereco = req.body;
-  await db.updateEndereco(id, endereco);
-  res.sendStatus(200);
-});
-app.post("/endereco", async (req, res) => {
-  const endereco = req.body;
-  await db.insertEndereco(endereco);
-  res.sendStatus(201);
-});
-app.get("/endereco/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  const results = await db.selectEndereco(id);
-  if (results) {
-    res.json({ data: results }); 
-  } else {
-    res.status(404).json({ error: "Cliente não encontrado" });
-  }
-});
-app.get("/endereco", async (req, res) => {
-  const results = await db.selectEnderecos();
-  res.header('X-Total-Count', results.length);
-  res.json(results);
-});
-
-//----------------grupo-----------------------
-app.delete("/grupo/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  await db.deleteGrupo(id); 
-  res.sendStatus(204);
-});
-app.patch("/grupo/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  const grupo = req.body;
-  await db.updateGrupo(id, grupo);
-  res.sendStatus(200);
-});
-app.post("/grupo", async (req, res) => {
-  const grupo = req.body;
-  await db.insertGrupo(grupo);
-  res.sendStatus(201);
-});
-app.get("/grupo/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  const results = await db.selectGrupo(id);
-  if (results) {
-    res.json({ data: results }); 
-  } else {
-    res.status(404).json({ error: "Cliente não encontrado" });
-  }
-});
-app.get("/grupo", async (req, res) => {
-  const results = await db.selectGrupos();
-  res.header('X-Total-Count', results.length);
-  res.json(results);
-});
-
-//----------------mensagem-----------------------
-app.delete("/mensagem/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  await db.deleteMensagem(id); 
-  res.sendStatus(204);
-});
-app.patch("/mensagem/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  const mensagem = req.body;
-  await db.updateMensagem(id, mensagem);
-  res.sendStatus(200);
-});
-app.post("/mensagem", async (req, res) => {
-  const mensagem = req.body;
-  await db.insertMensagem(mensagem);
-  res.sendStatus(201);
-});
-app.get("/mensagem/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  const results = await db.selectMensagem(id);
-  if (results) {
-    res.json({ data: results }); 
-  } else {
-    res.status(404).json({ error: "Cliente não encontrado" });
-  }
-});
-app.get("/mensagem", async (req, res) => {
-  const results = await db.selectMensagens();
-  res.header('X-Total-Count', results.length);
-  res.json(results);
-});
 
 //----------------Postagem-----------------------
 app.delete("/postagem/:id", async (req, res) => {

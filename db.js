@@ -92,73 +92,6 @@ async function deleteBairro(id) {
 } 
 
 
-//----------- Endereço -----------
-
-async function selectEnderecos() {
-    const results = await client.query("SELECT * FROM endereco;");
-    return results[0]; 
-}
-async function selectEndereco(id) { 
-    const results = await client.query("SELECT * FROM endereco WHERE id=?;", [id]);
-    return results[0];
-}
-async function insertEndereco(endereco) {
-    const results = await client.query("INSERT INTO endereco(numero, complemento, rua, codbairro) VALUES(?,?,?,?);", 
-    [ endereco.numero, endereco.complemento, endereco.rua, endereco.codbairro]);
-}
-async function updateEndereco(id, endereco) { 
-    const results = await client.query("UPDATE endereco SET numero=?, complemento=?, rua=?, codbairro=? WHERE id=?",
-    [endereco.numero, endereco.complemento, endereco.rua, endereco.codbairro, id])
-} 
-async function deleteEndereco(id) { 
-    await client.query("DELETE FROM endereco WHERE id=?", [id]);
-} 
-
-//----------- Grupo -----------
-
-async function selectGrupos() {
-    const results = await client.query("SELECT * FROM grupo;");
-    return results[0]; 
-}
-async function selectGrupo(id) { 
-    const results = await client.query("SELECT * FROM grupo WHERE id=?;", [id]);
-    return results[0];
-}
-async function insertGrupo(grupo) {
-    const results = await client.query("INSERT INTO grupo(nome, codbairro) VALUES(?,?);", 
-    [ grupo.nome, grupo.codbairro]);
-}
-async function updateGrupo(id, grupo) { 
-    const results = await client.query("UPDATE grupo SET nome=?, codbairro=? WHERE id=?",
-    [grupo.nome, grupo.codbairro, id])
-} 
-async function deleteGrupo(id) { 
-    await client.query("DELETE FROM grupo WHERE id=?", [id]);
-} 
-
-//----------- Mensagem -----------
-
-async function selectMensagens() {
-    const results = await client.query("SELECT * FROM mensagens;");
-    return results[0]; 
-}
-async function selectMensagem(id) { 
-    const results = await client.query("SELECT * FROM mensagens WHERE id=?;", [id]);
-    return results[0];
-}
-async function insertMensagem(mensagens) {
-    const results = await client.query("INSERT INTO mensagens(descricao, codusuario, tempo) VALUES(?,?,?);", 
-    [ mensagens.descricao, mensagens.codusuario, mensagens.tempo]);
-}
-async function updateMensagem(id, mensagens) { 
-    const results = await client.query("UPDATE mensagens SET descricao=?, codusuario=?, tempo=?,  WHERE id=?",
-    [mensagens.descricao, mensagens.codusuario, mensagens.tempo, id])
-} 
-async function deleteMensagem(id) { 
-    await client.query("DELETE FROM mensagens WHERE id=?", [id]);
-} 
-
-
 
 
 
@@ -371,9 +304,10 @@ async function selectUsuariosPorBairro(codbairro) {
       return results[0];
     } catch (error) {
       console.error("Erro na consulta SQL:", error);
-      return null; // Alterado para retornar null em caso de erro
+      return null;
     }
   }
+  
 
 module.exports = {
     selectCidades,
@@ -381,30 +315,6 @@ module.exports = {
     insertCidade,
     updateCidade,
     deleteCidade,
-    //-----------
-    selectBairros,
-    selectBairro,
-    insertBairro,
-    updateBairro,
-    deleteBairro,
-    //-----------
-    selectEnderecos,
-    selectEndereco,
-    insertEndereco,
-    updateEndereco,
-    deleteEndereco,
-    //------------
-    selectGrupos,
-    selectGrupo,
-    insertGrupo,
-    updateGrupo,
-    deleteGrupo,
-    //------------
-    selectMensagens,
-    selectMensagem,
-    insertMensagem,
-    updateMensagem,
-    deleteMensagem,
     //------------
     selectPostagens,
     selectPostagem,
