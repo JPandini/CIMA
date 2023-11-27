@@ -385,6 +385,29 @@ app.post("/usuario",  async (req, res) => {
   await db.insertUsuario(usuario);
   res.sendStatus(201);
 
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,    
+    secure: true, 
+    auth: {
+      user: 'cimabairros@gmail.com',
+      pass: 'zksn nbdj knjg ubqt',
+    },
+    tls: {
+      ciphers: 'SSLv3',
+      rejectUnauthorized: false,
+    }
+  });
+
+  
+  const info = await transporter.sendMail({
+    from: 'cimabairros@gmail.com',
+    to: usuario.email,
+    subject: 'Solicitação aprovada!',
+    text: 'Parabéns! Sua conta foi aprovada no aplicativo CIMA. att. equipe CIMA',
+    html: '<p>Parabéns! Sua conta foi aprovada!</p>',
+  });
+
 });
 
 
@@ -441,28 +464,7 @@ app.post("/usuario_temp", async (req, res) => {
   res.sendStatus(201);
 
   
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,    
-    secure: true, 
-    auth: {
-      user: 'cimabairros@gmail.com',
-      pass: 'zksn nbdj knjg ubqt',
-    },
-    tls: {
-      ciphers: 'SSLv3',
-      rejectUnauthorized: false,
-    }
-  });
 
-  
-  const info = await transporter.sendMail({
-    from: 'cimabairros@gmail.com',
-    to: usuario_temp.email,
-    subject: 'Solicitação aprovada!',
-    text: 'Parabéns! Sua conta foi aprovada no aplicativo CIMA. att. equipe CIMA',
-    html: '<p>Parabéns! Sua conta foi criada.</p>',
-  });
 
   
 
