@@ -273,24 +273,6 @@ async function selectUsuariosPorBairro(codbairro) {
     return results[0];
   }
 
-
-  async function selectPostagensByUsuario(codUsuario) {
-    const query = `
-      SELECT p.*, u.codbairro
-      FROM postagens p
-      JOIN usuario u ON p.codusuario = u.id
-      WHERE p.codusuario = ?;
-    `;
-  
-    try {
-      const results = await client.query(query, [codUsuario]);
-      return results[0];
-    } catch (error) {
-      console.error("Erro na consulta SQL:", error);
-      return null;
-    }
-  }
-
   async function selectPostagensByUsuario(userId) {
     const query = `
       SELECT *
@@ -300,6 +282,23 @@ async function selectUsuariosPorBairro(codbairro) {
   
     try {
       const results = await client.query(query, [userId]);
+      return results[0];
+    } catch (error) {
+      console.error("Erro na consulta SQL:", error);
+      return null;
+    }
+  }
+
+  async function selectPostagensByBairro(idBairro) {
+    const query = `
+      SELECT postagens.*
+      FROM postagens
+      INNER JOIN usuario ON postagens.codUsuario = usuario.id
+      WHERE usuario.codbairro = ?;
+    `;
+  
+    try {
+      const results = await client.query(query, [idBairro]);
       return results[0];
     } catch (error) {
       console.error("Erro na consulta SQL:", error);
