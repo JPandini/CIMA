@@ -291,16 +291,15 @@ async function selectUsuariosPorBairro(codbairro) {
     }
   }
 
-  async function selectPostagensByBairro(idBairro) {
+  async function selectPostagensByUsuario(userId) {
     const query = `
-      SELECT postagens.*
+      SELECT *
       FROM postagens
-      INNER JOIN usuario ON postagens.codUsuario = usuario.id
-      WHERE usuario.codbairro = ?;
+      WHERE codUsuario = ?;
     `;
   
     try {
-      const results = await client.query(query, [idBairro]);
+      const results = await client.query(query, [userId]);
       return results[0];
     } catch (error) {
       console.error("Erro na consulta SQL:", error);

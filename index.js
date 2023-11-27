@@ -99,8 +99,8 @@ app.get('/dadosGrafico/:codbairro?', async (req, res) => {
 
 app.get('/postagem/usuario/:codusuario', async (req, res) => {
   try {
-    const { codUsuario } = req.params;
-    const postagens = await db.selectPostagensByUsuario(codUsuario);
+    const { codusuario } = req.params;
+    const postagens = await db.selectPostagensByUsuario(codusuario);
     res.json(postagens);
   } catch (error) {
     console.error('Erro ao obter postagens por usuário:', error);
